@@ -20,7 +20,7 @@ struct ExpressionA* newExpression (char sym, struct ExpressionA* left, struct Ex
 
 %union {
   struct ExpressionA* expA;
-  int num;
+  float num;
 }
 
 %type <expA> expression
@@ -28,7 +28,7 @@ struct ExpressionA* newExpression (char sym, struct ExpressionA* left, struct Ex
 %type <expA> facteur
 
 %token <num> NOMBRE
-%token <flt> FLOAT
+%token <ent> ENTIER
 
 %%
 resultat:   expression           {*ast = *$1;}
@@ -40,6 +40,7 @@ expression:
 terme: 
     terme '*' facteur            {$$ = newExpression('*',$1,$3,0);}
   | terme '/' facteur            {$$ = newExpression('/',$1,$3,0);}
+  | terme '%' facteur            {$$ = newExpression('%',$1,$3,0);}
   | facteur                      {$$ = $1;}
   ;
 facteur: 
