@@ -6,49 +6,65 @@
 #include "AST.c"
 
 int noeud = 0;
-float parcours(struct ExpressionA* ast);
+void parcours(struct ExpressionA* ast);
 struct ExpressionA* parcours_taille(struct ExpressionA* ast);
 
 int main(void)
 {
-  struct ExpressionA* ast = (struct  ExpressionA*)malloc( sizeof( struct  ExpressionA ) );
-  ast->taille = 0;
-  float val;
-  yyparse(ast);
-  val = parcours(ast);
-  fprintf(stderr, "resultats: %d \n", ast->taille);
+	struct ExpressionA* ast = (struct  ExpressionA*)malloc( sizeof( struct  ExpressionA ) );
+	ast->taille = 0;
+	float val;
+	yyparse(ast);
+	parcours(ast);
+	FILE* fichier = fopen("code.jsm", "a");
+	fprintf(stderr, "resultats: %d \n", ast->taille);
+	fprintf(fichier, "Halt\n");
+	fclose(fichier);
 
 }
-float parcours(struct ExpressionA* ast){
-	if (!ast) 
-		return 0;
-  switch (ast->sym)
-  {
-    case 's' : return parcours(ast->left) <= parcours(ast->right);
-    case '=' : parcours(ast->left) == parcours(ast->right);
-    case '+' : return parcours(ast->left) + parcours(ast->right);
-    case '-' : return parcours(ast->left) - parcours(ast->right);
-    case '/' : return parcours(ast->left) / parcours(ast->right);
-    case '*' : return parcours(ast->left) * parcours(ast->right);
-    case '%' : return (float)(((int)parcours(ast->left)) % ((int)parcours(ast->right)));
-    default : ast->val;
-  }
-  return 0;
+void parcours(struct ExpressionA* ast){
+  	FILE* fichier = fopen("code.jsm", "a");
+	if (fichier != NULL){
+    	if (!ast) 
+		  	return 0;
+    	switch (ast->sym)
+    	{
+      		case 's' :  
+			  parcours(ast->left) ; parcours(ast->right);
+			  fprintf(fichier, "LowEqR\n");
+			  break;
+      		case '=' : 
+			  parcours(ast->left); parcours(ast->right);
+			  fprintf(fichier, "Equal\n");
+			  break;
+      		case '+' : 
+			  parcours(ast->left); parcours(ast->right);
+			  fprintf(fichier, "AddiRe\n");
+			  break;
+      		case '-' : 
+			  parcours(ast->left) ; parcours(ast->right);
+			  fprintf(fichier, "SubiRe\n");
+			  break;
+      		case '/' : 
+			  parcours(ast->left) ; parcours(ast->right); 
+			  fprintf(fichier, "DiviRe\n");
+			  break;
+      		case '*' : 
+			  parcours(ast->left) ; parcours(ast->right); 
+			  fprintf(fichier, "MultiRe\n");
+			  break;
+      		case '%' : 
+			  parcours(ast->left) ; parcours(ast->right); 
+			  fprintf(fichier, "Modulo\n");
+			  break;
+      		default : fprintf(fichier, "CstRe %d\n",  ast->val); 
+    	}
+		
+  	}
+  	else{
+  		printf("Erreur de fichier\n");
+  	}
+	fclose(fichier);
 }
 
-struct ExpressionA* parcours_taille(struct ExpressionA* ast){
-	if (!ast) 
-		return ast;
-  switch (ast->sym)
-  {
-    case 's' : return parcours(ast->left) <= parcours(ast->right);
-    case '=' : parcours(ast->left) == parcours(ast->right);
-    case '+' : return parcours(ast->left) + parcours(ast->right);
-    case '-' : return parcours(ast->left) - parcours(ast->right);
-    case '/' : return parcours(ast->left) / parcours(ast->right);
-    case '*' : return parcours(ast->left) * parcours(ast->right);
-    case '%' : return (float)(((int)parcours(ast->left)) % ((int)parcours(ast->right)));
-    default : ast->val;
-  }
-  return 0;
-}
+
