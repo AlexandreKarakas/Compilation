@@ -61,7 +61,7 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 21 "TP.y"
+#line 22 "TP.y"
 
   struct ExpressionA* expA;
   int num;

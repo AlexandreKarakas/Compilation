@@ -1,12 +1,7 @@
-CstRe 9
-CstRe 9
-AddiRe
-CstRe 9
-AddiRe
-Halt
-CstRe 9
-CstRe 9
-AddiRe
-CstRe 9
-AddiRe
+CstRe 4
+CstRe 5
+CstRe 10
+ConJmp 2
+Jump 2
+CstRe 0
 Halt
