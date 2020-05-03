@@ -6,7 +6,7 @@
 %}
 %%
 [0-9]+ {yylval.num=atoi(yytext); return NOMBRE;}
--?([0-9]*[.])?[0-9]+ {yylval.num=atoi(yytext); return NOMBRE;}
+([0-9]*[.])?[0-9]+ {yylval.num=atoi(yytext); return NOMBRE;}
 "Vrai" {yylval.num=1; return BOOLEAN;}
 "Faux" {yylval.num=0; return BOOLEAN;}
 "<=" return supEgal;
