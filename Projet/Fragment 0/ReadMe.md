@@ -6,15 +6,15 @@
 
 Dans le dossier vous trouverez plusieurs fichier dont : 
 
-*TP.y
+  *TP.y
 
-*TP.l
+  *TP.l
 
-*TP.c
+  *TP.c
 
-*AST.c
+  *AST.c
 
-*Code.jsm
+  *Code.jsm
 
 Le code jsm permet de produire un code qui peut être lu par la machine miniJs
 
