@@ -1,17 +1,8 @@
-CstRe 4
 CstRe 5
-CstRe 10
+CstRe 9
+Equal
 ConJmp 2
-Jump 2
-CstRe 0
-Halt
-CstRe 56
-Halt
-CstRe 56
-CstRe 6
-SubiRe
-Halt
-CstRe 6
-CstRe 6
-SubiRe
+CstRe 9
+Jump 1
+CstRe 10
 Halt
