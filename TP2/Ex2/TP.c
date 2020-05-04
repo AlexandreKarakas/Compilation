@@ -21,7 +21,6 @@ int main(void)
 	}
 	if((fichier = fopen("code.jsm", "a")) != NULL){
 		parcours(ast);
-		fprintf(stderr, "resultats: %d \n", ast->val);
 		fprintf(fichier, "Halt\n");
 		fclose(fichier);
 	}
@@ -100,7 +99,7 @@ void parcours(struct ExpressionA* ast){
 				case '?' :
 					taille =  ast->middle->taille + 1;
 					parcours(ast->left);
-					fprintf(fichier, "ConJmp %d\n", taille+1);
+					fprintf(fichier, "ConJmp %d\n", taille);
 					taille = ast->right->taille + 1;
 					parcours(ast->middle);
 					fprintf(fichier, "Jump %d\n", taille);

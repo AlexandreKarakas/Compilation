@@ -32,10 +32,11 @@ struct ExpressionA* newExpression (char sym, struct ExpressionA* left, struct Ex
 %token <supE> supEgal
 %token <eq> Equals
 
-%left Equals supEgal
+%right '?' ':'
+%nonassoc MOINSU
+%precedence Equals supEgal
 %left '+' '-'
 %left '*' '/'
-%nonassoc MOINSU '?' ':'
 
 %%
 
@@ -46,7 +47,7 @@ expression:
   | expression '+' expression                 {$$ = newExpression('+',$1,NULL,$3,0);}
   | expression '-' expression                 {$$ = newExpression('-',$1,NULL,$3,0);}
   | expression Equals expression              {$$ = newExpression('=',$1,NULL,$3,0);}
-  | expression supEgal expression             {$$ = newExpression('s',$1,NULL,$3,0);}
+  | expression supEgal expression 			  {$$ = newExpression('s',$1,NULL,$3,0);}
   | expression '*' expression                 {$$ = newExpression('*',$1,NULL,$3,0);}
   | expression '/' expression                 {$$ = newExpression('/',$1,NULL,$3,0);}
   | expression '%' expression                 {$$ = newExpression('%',$1,NULL,$3,0);}
