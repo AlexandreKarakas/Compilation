@@ -21,7 +21,6 @@ int main(void)
 	}
 	if((fichier = fopen("code.jsm", "a")) != NULL){
 		parcours(ast);
-		fprintf(stderr, "resultats: %d \n", ast->val);
 		fprintf(fichier, "Halt\n");
 		fclose(fichier);
 	}

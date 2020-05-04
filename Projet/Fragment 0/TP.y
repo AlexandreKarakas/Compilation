@@ -32,29 +32,29 @@ struct ExpressionA* newExpression (char sym, struct ExpressionA* left, struct Ex
 %token <supE> supEgal
 %token <eq> Equals
 
-%right Equals supEgal
+%right '?' ':'
+%nonassoc MOINSU
+%precedence Equals supEgal
 %left '+' '-'
 %left '*' '/'
-%left '?' ':' 
-%nonassoc MOINSU
 
 %%
 
 resultat:   expression           {*ast = *$1;}
 
-expression:  
-   expression '+' expression    {$$ = newExpression('+',$1,NULL,$3,0);}
-  | expression '-' expression    {$$ = newExpression('-',$1,NULL,$3,0);}
-  | expression '?' expression ':' expression {$$ = newExpression('?', $1, $3, $5, 0);}
-  | expression Equals expression {$$ = newExpression('=',$1,NULL,$3,0);}
-  | expression supEgal expression{$$ = newExpression('s',$1,NULL,$3,0);}
-  | expression '*' expression    {$$ = newExpression('*',$1,NULL,$3,0);}
-  | expression '/' expression    {$$ = newExpression('/',$1,NULL,$3,0);}
-  | expression '%' expression    {$$ = newExpression('%',$1,NULL,$3,0);}
-  | '(' expression ')'           {$$ = $2;}
-  | '-' expression %prec MOINSU  {$$ = newExpression('-',$2,NULL,NULL,0);}
-  | NOMBRE                       {$$ = newExpression('0',NULL,NULL,NULL,$1);}
-  | BOOLEAN                      {if ($1 == 1) $$ = newExpression('V',NULL,NULL,NULL,$1); else $$ = newExpression('F', NULL,NULL, NULL, $1);}
+expression:
+    expression '?' expression ':' expression  {$$ = newExpression('?',$1,$3,$5,0);}
+  | expression '+' expression                 {$$ = newExpression('+',$1,NULL,$3,0);}
+  | expression '-' expression                 {$$ = newExpression('-',$1,NULL,$3,0);}
+  | expression Equals expression              {$$ = newExpression('=',$1,NULL,$3,0);}
+  | expression supEgal expression 			  {$$ = newExpression('s',$1,NULL,$3,0);}
+  | expression '*' expression                 {$$ = newExpression('*',$1,NULL,$3,0);}
+  | expression '/' expression                 {$$ = newExpression('/',$1,NULL,$3,0);}
+  | expression '%' expression                 {$$ = newExpression('%',$1,NULL,$3,0);}
+  | '(' expression ')'                        {$$ = $2;}
+  | '-' expression %prec MOINSU               {$$ = newExpression('-',$2,NULL,NULL,0);}
+  | NOMBRE                                    {$$ = newExpression('0',NULL,NULL,NULL,$1);}
+  | BOOLEAN                                   {if ($1 == 1) $$ = newExpression('V',NULL,NULL,NULL,$1); else $$ = newExpression('F', NULL,NULL, NULL, $1);}
   ;
 
 %%
@@ -64,4 +64,3 @@ expression:
 
 int yyerror(void)
 { fprintf(stderr, "erreur de syntaxe\n"); return 1;}
-

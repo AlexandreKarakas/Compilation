@@ -9,7 +9,7 @@
 ([0-9]*[.])?[0-9]+ {yylval.num=atoi(yytext); return NOMBRE;}
 "Vrai" {yylval.num=1; return BOOLEAN;}
 "Faux" {yylval.num=0; return BOOLEAN;}
-"<=" return supEgal;
+">=" return supEgal;
 "===" return Equals;
 [ \t] ; /* ignore les blancs et tabulations */
 \n return 0;
