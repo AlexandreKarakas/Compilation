@@ -16,7 +16,7 @@ struct ExpressionA* newExpression (char *sym, struct ExpressionA* left, struct E
   return rez;
 }
 
-struct Commande* newCommand(char *sym, struct ExpressionA* left, struct ExpressionA* middle, struct ExpressionA* right, int val ){
+struct Commande* newCommand(char *sym, struct ExpressionA* left, struct ExpressionA* middle, struct ExpressionA* right, int val, char *ident){
   struct Commande* cmd = (struct Commande*)malloc(sizeof(struct Commande));
   if(cmd){
     strcpy(cmd->exp.sym, sym);
@@ -24,10 +24,16 @@ struct Commande* newCommand(char *sym, struct ExpressionA* left, struct Expressi
     cmd->exp.middle = middle;
     cmd->exp.right = right;
     cmd->exp.val = val;
+    strcpy(cmd->exp.id, ident);
   }
   return cmd;
 }
 
+Programme * newProgramme(char * sym, struct ExpressionA* left, struct ExpressionA* middle, struct ExpressionA* right, int val, char* ident){
+  Programme * prg =(Programme *)malloc(sizeof( Programme *));
+  prg.cmd = newCommand(sym, left, middle, right, val, ident);
+  prg->suivant = NULL;
+}
 %}
 
 %parse-param {struct ExpressionA* ast}
