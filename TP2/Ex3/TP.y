@@ -46,10 +46,11 @@ struct Commande* newCommand(char *sym, struct ExpressionA* left, struct Expressi
 %token <eq> Equals
 %token <id> IDENT
 
-%right Equals supEgal
+
 %left '+' '-'
 %left '*' '/'
-%left '?' ':' 
+%right '?' ':' 
+%precedence Equals supEgal
 %nonassoc MOINSU
 
 %%
