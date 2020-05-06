@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "AST.c"
 FILE* fichier;
 
@@ -21,7 +22,7 @@ int main(void)
 	}
 	if((fichier = fopen("code.jsm", "a")) != NULL){
 		parcours(ast);
-		fprintf(stderr, "resultats: %d \n", ast->val);
+		fprintf(stderr, "resultats: %d \n", ast->right->val);
 		fprintf(fichier, "Halt\n");
 		fclose(fichier);
 	}
@@ -38,8 +39,10 @@ void print2DUtil(struct ExpressionA* root, int space){
 	printf("\n");
 	for(int i=10; i<space; i++)
 		printf(" ");
-	if(root->sym == '0')	printf("%d", root->val);
-	else printf("%c", root->sym);
+	if(strncmp(root->sym, "0", 1) == 0)	
+		printf("%d", root->val);
+	else 
+		printf("%s", root->sym);
 
 	if(root->middle != NULL) {
 		print2DUtil(root->middle, space-1);
@@ -59,56 +62,54 @@ void parcours(struct ExpressionA* ast){
 	if (fichier != NULL){
     	if (!ast){
 				return;
-			}
-    	switch (ast->sym)
+		}
+    	if (strncmp(ast->sym, "<=", 2) == 0)
     	{
-      	case 's' :
-					parcours(ast->left);
-					parcours(ast->right);
-					fprintf(fichier, "LowEqR\n");
-					break;
-      	case '=' :
-					parcours(ast->left);
-					parcours(ast->right);
-					fprintf(fichier, "Equal\n");
-					break;
-      	case '+' :
-					parcours(ast->left);
-					parcours(ast->right);
-					fprintf(fichier, "AddiRe\n");
-					break;
-      	case '-' :
-					parcours(ast->left);
-					parcours(ast->right);
-					fprintf(fichier, "SubsRe\n");
-					break;
-      	case '/' :
-					parcours(ast->left);
-					parcours(ast->right);
-					fprintf(fichier, "DiviRe\n");
-					break;
-      	case '*' :
-					parcours(ast->left);
-					parcours(ast->right);
-					fprintf(fichier, "MultiRe\n");
-					break;
-      	case '%' :
-					parcours(ast->left);
-					parcours(ast->right);
-					fprintf(fichier, "Modulo\n");
-					break;
-				case '?' :
-					taille =  ast->middle->taille;
-					parcours(ast->left);
-					fprintf(fichier, "ConJmp %d\n", taille+1);
-					taille = ast->right->taille;
-					parcours(ast->middle);
-					fprintf(fichier, "Jump %d\n", taille);
-					parcours(ast->right);
-					break;
-      	default :
-					fprintf(fichier, "CstRe %d\n",  ast->val);
-					break;
+			parcours(ast->left);
+			parcours(ast->right);
+			fprintf(fichier, "LowEqR\n");
+		}
+		else if (strncmp(ast->sym, "===", 3) == 0){
+			parcours(ast->left);
+			parcours(ast->right);
+			fprintf(fichier, "Equal\n");
+		}
+		else if (strncmp(ast->sym, "+", 1) == 0){
+			parcours(ast->left);
+			parcours(ast->right);
+			fprintf(fichier, "AddiRe\n");
+		}
+		else if (strncmp(ast->sym, "-", 1) == 0){
+			parcours(ast->left);
+			parcours(ast->right);
+			fprintf(fichier, "SubsRe\n");
+		}
+		else if (strncmp(ast->sym, "/", 1) == 0){
+			parcours(ast->left);
+			parcours(ast->right);
+			fprintf(fichier, "DiviRe\n");
+		}
+		else if (strncmp(ast->sym, "*", 1) == 0){
+			parcours(ast->left);
+			parcours(ast->right);
+			fprintf(fichier, "MultiRe\n");
+		}
+		else if (strncmp(ast->sym, "%", 1)== 0){
+			parcours(ast->left);
+			parcours(ast->right);
+			fprintf(fichier, "Modulo\n");
+		}
+		else if (strncmp(ast->sym,"?:", 2) == 0){
+			taille =  ast->middle->taille;
+			parcours(ast->left);
+			fprintf(fichier, "ConJmp %d\n", taille+1);
+			taille = ast->right->taille;
+			parcours(ast->middle);
+			fprintf(fichier, "Jump %d\n", taille);
+			parcours(ast->right);
+		}
+      	else{
+			fprintf(fichier, "CstRe %d\n",  ast->val);
     	}
 
   	}
@@ -125,31 +126,24 @@ struct ExpressionA* parcours_taille(struct ExpressionA* ast){
 	if (!ast)
 		return ast;
 
-  switch (ast->sym) {
-		case 's' :
-		case '=' :
-		case '+' :
-		case '-' :
-		case '/' :
-		case '*' :
-		case '%' :
-			ast1 = parcours_taille(ast->left);
-			ast2 = parcours_taille(ast->right);
-			ast->taille = ast1->taille + ast2->taille + 1;
-			ast->left = ast1;
-			ast->right = ast2;
-			return ast;
-		case '?' :
-			ast1 = parcours_taille(ast->left);
-			ast2 = parcours_taille(ast->right);
-			ast3 = parcours_taille(ast->middle);
-			ast->taille = ast1->taille + ast2->taille + ast3->taille + 2;
-			ast->left = ast1;
-			ast->right = ast2;
-			ast->middle = ast3;
-			return ast;
-    default :
-			ast->taille = 1;
-			return ast;
+  	if (strncmp(ast->sym, "<=",2) == 0 || strncmp(ast->sym, "===", 3) == 0 || strncmp(ast->sym, "+", 1) == 0 || strncmp(ast->sym, "-", 1) == 0 || strncmp(ast->sym, "/", 1) == 0 || strncmp(ast->sym, "*", 1) == 0 || strncmp(ast->sym, "%", 1)== 0) {
+		ast1 = parcours_taille(ast->left);
+		ast2 = parcours_taille(ast->right);
+		ast->taille = ast1->taille + ast2->taille + 1;
+		ast->left = ast1;
+		ast->right = ast2;
+	}
+	else if (strncmp(ast->sym,"?:", 2) == 0){
+		ast1 = parcours_taille(ast->left);
+		ast2 = parcours_taille(ast->right);
+		ast3 = parcours_taille(ast->middle);
+		ast->taille = ast1->taille + ast2->taille + ast3->taille + 2;
+		ast->left = ast1;
+		ast->right = ast2;
+		ast->middle = ast3;
+	}
+    else{
+		ast->taille = 1;
   	}
+	return ast;
 }
