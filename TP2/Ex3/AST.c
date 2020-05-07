@@ -20,6 +20,6 @@ struct Commande {
 
 typedef struct Programme Programme;
 struct Programme {
-  struct Commande cmd;
+  struct Commande *cmd;
   Programme *suivant;
 };

@@ -49,12 +49,12 @@ extern int yydebug;
 # define YYTOKENTYPE
   enum yytokentype
   {
-    NOMBRE = 258,
-    BOOLEAN = 259,
-    supEgal = 260,
-    Equals = 261,
-    IDENT = 262,
-    MOINSU = 263
+    NOMBRE = 270,
+    BOOLEAN = 271,
+    supEgal = 272,
+    Equals = 273,
+    IDENT = 274,
+    MOINSU = 275
   };
 #endif
 
@@ -62,13 +62,14 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 41 "TP.y"
+#line 60 "TP.y"
 
   struct ExpressionA* expA;
   int num;
   int bl;
+  char *op;
 
-#line 72 "TP.tab.h"
+#line 73 "TP.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
