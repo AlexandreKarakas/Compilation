@@ -51,10 +51,15 @@ extern int yydebug;
   {
     NOMBRE = 258,
     BOOLEAN = 259,
-    supEgal = 260,
+    infEgal = 260,
     Equals = 261,
     IDENT = 262,
-    MOINSU = 263
+    supEgal = 263,
+    Et = 264,
+    Ou = 265,
+    Diff = 266,
+    pow = 267,
+    MOINSU = 268
   };
 #endif
 
@@ -62,13 +67,14 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 41 "TP.y"
+#line 55 "TP.y"
 
   struct ExpressionA* expA;
   int num;
   int bl;
+  char * id;
 
-#line 72 "TP.tab.h"
+#line 78 "TP.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

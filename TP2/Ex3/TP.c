@@ -79,7 +79,12 @@ void parcours(struct ExpressionA* ast){
 			parcours(ast->right);
 			fprintf(fichier, "AddiRe\n");
 		}
-		else if (strncmp(ast->sym, "-", 1) == 0){
+		else if (strncmp(ast->sym, "-_op", 1) == 0){
+			parcours(ast->left);
+			parcours(ast->right);
+			fprintf(fichier, "SubsRe\n");
+		}
+		else if (strncmp(ast->sym, "-_unaire", 1) == 0){
 			parcours(ast->left);
 			parcours(ast->right);
 			fprintf(fichier, "SubsRe\n");
@@ -108,8 +113,34 @@ void parcours(struct ExpressionA* ast){
 			fprintf(fichier, "Jump %d\n", taille);
 			parcours(ast->right);
 		}
+		else if (strncmp(ast->sym, "=", 1) == 0){
+			//parcours(ast->right);
+			fprintf(fichier, "SetVar ");
+			parcours(ast->left);
+			
+		}
+		/*else if (strncmp(ast->sym, "&&", 2) == 0){
+			parcours(ast->left);
+			parcours(ast->right);
+			fprintf(fichier, "MultiRe\n");
+		}
+		*/
+		else if (strncmp(ast->sym, "!==", 3) == 0){
+			parcours(ast->left);
+			parcours(ast->right);
+			fprintf(fichier, "NotEq\n");
+		}
+		else if (strncmp(ast->sym, ">=", 2) == 0)
+    	{
+			parcours(ast->left);
+			parcours(ast->right);
+			fprintf(fichier, "GreEqR\n");
+		}
       	else{
-			fprintf(fichier, "CstRe %d\n",  ast->val);
+			if (strncmp(ast->sym, "0", 1) == 0) 
+				fprintf(fichier, "CstRe %d\n",  ast->val);
+			else if (strncmp(ast->sym, "id", 2) == 0)
+				fprintf(fichier, "%s", ast->id);
     	}
 
   	}
@@ -126,7 +157,8 @@ struct ExpressionA* parcours_taille(struct ExpressionA* ast){
 	if (!ast)
 		return ast;
 
-  	if (strncmp(ast->sym, "<=",2) == 0 || strncmp(ast->sym, "===", 3) == 0 || strncmp(ast->sym, "+", 1) == 0 || strncmp(ast->sym, "-", 1) == 0 || strncmp(ast->sym, "/", 1) == 0 || strncmp(ast->sym, "*", 1) == 0 || strncmp(ast->sym, "%", 1)== 0) {
+  	if (strncmp(ast->sym, "<=",2) == 0 || strncmp(ast->sym, "===", 3) == 0 || strncmp(ast->sym, "+", 1) == 0 || strncmp(ast->sym, "-_op", 1) == 0 || strncmp(ast->sym, "/", 1) == 0 || strncmp(ast->sym, "*", 1) == 0 || strncmp(ast->sym, "%", 1)== 0 ||
+	  strncmp(ast->sym, "-_unaire", 1) == 0 || strncmp(ast->sym, ">=", 2) == 0 || strncmp(ast->sym, "!==", 3) == 0 || strncmp(ast->sym, "=", 1) == 0) {
 		ast1 = parcours_taille(ast->left);
 		ast2 = parcours_taille(ast->right);
 		ast->taille = ast1->taille + ast2->taille + 1;

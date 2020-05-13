@@ -16,6 +16,20 @@ struct ExpressionA* newExpression (char *sym, struct ExpressionA* left, struct E
   return rez;
 }
 
+struct ExpressionA* newExpression2 (char *sym, struct ExpressionA* left, struct ExpressionA* middle, struct ExpressionA* right,int val, char *ident) {
+  struct ExpressionA* rez = (struct  ExpressionA*)malloc( sizeof( struct  ExpressionA ) );
+  if(rez)
+    {
+      strcpy(rez->sym, sym);
+      rez->left  = left;
+      rez->middle = middle;
+      rez->right = right;
+      rez->val   = val;
+      strcpy(rez->id, ident);
+    }
+  return rez;
+}
+
 struct Commande* newCommand(char *sym, struct ExpressionA* left, struct ExpressionA* middle, struct ExpressionA* right, int val, char *ident){
   struct Commande* cmd = (struct Commande*)malloc(sizeof(struct Commande));
   if(cmd){
@@ -31,7 +45,7 @@ struct Commande* newCommand(char *sym, struct ExpressionA* left, struct Expressi
 
 Programme * newProgramme(char * sym, struct ExpressionA* left, struct ExpressionA* middle, struct ExpressionA* right, int val, char* ident){
   Programme * prg =(Programme *)malloc(sizeof( Programme *));
-  prg.cmd = newCommand(sym, left, middle, right, val, ident);
+  prg->cmd = newCommand(sym, left, middle, right, val, ident);
   prg->suivant = NULL;
 }
 %}
@@ -42,15 +56,21 @@ Programme * newProgramme(char * sym, struct ExpressionA* left, struct Expression
   struct ExpressionA* expA;
   int num;
   int bl;
+  char * id;
 }
 
 %type <expA> expression
 
 %token <num> NOMBRE
 %token <bl> BOOLEAN
-%token <supE> supEgal
+%token <infE> infEgal
 %token <eq> Equals
 %token <id> IDENT
+%token <supE> supEgal
+%token <and> Et
+%token <or> Ou
+%token <diff> Diff
+%token <pow> pow
 
 
 %left '+' '-'
@@ -74,17 +94,23 @@ commande :
 
 expression:  
    expression '+' expression    {$$ = newExpression("+",$1,NULL,$3,0);}
-  | expression '-' expression    {$$ = newExpression("-",$1,NULL,$3,0);}
+  | expression '-' expression    {$$ = newExpression("-_op",$1,NULL,$3,0);}
   | expression '?' expression ':' expression {$$ = newExpression("?:", $1, $3, $5, 0);}
   | expression Equals expression {$$ = newExpression("===",$1,NULL,$3,0);}
-  | expression supEgal expression{$$ = newExpression("<=",$1,NULL,$3,0);}
+  | expression infEgal expression{$$ = newExpression("<=",$1,NULL,$3,0);}
+  | expression supEgal expression{$$ = newExpression(">=",$1,NULL,$3,0);}
+  | expression Et expression     {$$ = newExpression("&&",$1,NULL,$3,0);}
+  | expression Diff expression   {$$ = newExpression("!==",$1,NULL,$3,0);}
   | expression '*' expression    {$$ = newExpression("*",$1,NULL,$3,0);}
   | expression '/' expression    {$$ = newExpression("/",$1,NULL,$3,0);}
   | expression '%' expression    {$$ = newExpression("%",$1,NULL,$3,0);}
+  | expression '>' expression    {$$ = newExpression(">", $1,NULL,$3,0);}
   | '(' expression ')'           {$$ = $2;}
-  | '-' expression %prec MOINSU  {$$ = newExpression("-",$2,NULL,NULL,0);}
+  | '-' expression %prec MOINSU  {$$ = newExpression("-_unaire",$2,NULL,NULL,0);}
+  | IDENT '=' expression         {$$ = newExpression("=",$1, NULL,$3,0);}
   | NOMBRE                       {$$ = newExpression("0",NULL,NULL,NULL,$1);}
   | BOOLEAN                      {if ($1 == 1) $$ = newExpression("Vrai",NULL,NULL,NULL,$1); else $$ = newExpression("Faux", NULL,NULL, NULL, $1);}
+  | IDENT                        {$$ = newExpression2("id", NULL, NULL, NULL, NULL, $1);}
   ;
 
 %%
