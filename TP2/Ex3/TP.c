@@ -114,7 +114,7 @@ void parcours(struct ExpressionA* ast){
 			parcours(ast->right);
 		}
 		else if (strncmp(ast->sym, "=", 1) == 0){
-			//parcours(ast->right);
+			parcours(ast->right);
 			fprintf(fichier, "SetVar ");
 			parcours(ast->left);
 			

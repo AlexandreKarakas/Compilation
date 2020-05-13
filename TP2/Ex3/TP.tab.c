@@ -1401,7 +1401,7 @@ yyreduce:
 
   case 17:
 #line 110 "TP.y"
-    {(yyval.expA) = newExpression("=",(yyvsp[-2].id), NULL,(yyvsp[0].expA),0);}
+    {(yyval.expA) = newExpression("=",newExpression2("id", NULL, NULL, NULL, NULL, (yyvsp[-2].id)), NULL,(yyvsp[0].expA),0);}
 #line 1406 "TP.tab.c"
     break;
 

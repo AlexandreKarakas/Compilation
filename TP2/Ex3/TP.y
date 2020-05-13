@@ -107,7 +107,7 @@ expression:
   | expression '>' expression    {$$ = newExpression(">", $1,NULL,$3,0);}
   | '(' expression ')'           {$$ = $2;}
   | '-' expression %prec MOINSU  {$$ = newExpression("-_unaire",$2,NULL,NULL,0);}
-  | IDENT '=' expression         {$$ = newExpression("=",$1, NULL,$3,0);}
+  | IDENT '=' expression         {$$ = newExpression("=",newExpression2("id", NULL, NULL, NULL, NULL, $1), NULL,$3,0);}
   | NOMBRE                       {$$ = newExpression("0",NULL,NULL,NULL,$1);}
   | BOOLEAN                      {if ($1 == 1) $$ = newExpression("Vrai",NULL,NULL,NULL,$1); else $$ = newExpression("Faux", NULL,NULL, NULL, $1);}
   | IDENT                        {$$ = newExpression2("id", NULL, NULL, NULL, NULL, $1);}
