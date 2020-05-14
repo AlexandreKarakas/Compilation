@@ -56,7 +56,7 @@ Programme * newProgramme(char * sym, struct ExpressionA* left, struct Expression
   struct ExpressionA* expA;
   int num;
   int bl;
-  char * id;
+  char *id;
 }
 
 %type <expA> expression

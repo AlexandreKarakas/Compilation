@@ -12,6 +12,7 @@ struct ExpressionA* parcours_taille(struct ExpressionA* ast);
 
 int main(void)
 {
+	
 	struct ExpressionA* ast = (struct  ExpressionA*)malloc( sizeof( struct  ExpressionA ) );
 	ast->taille = 0;
 	yyparse(ast);
@@ -41,7 +42,9 @@ void print2DUtil(struct ExpressionA* root, int space){
 		printf(" ");
 	if(strncmp(root->sym, "0", 1) == 0)	
 		printf("%d", root->val);
-	else 
+	else if (strncmp(root->sym, "id", 2) == 0)
+		printf("%s", root->id);
+	else
 		printf("%s", root->sym);
 
 	if(root->middle != NULL) {
