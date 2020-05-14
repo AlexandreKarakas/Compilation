@@ -10,11 +10,21 @@ FILE* fichier;
 void parcours(struct ExpressionA* ast);
 struct ExpressionA* parcours_taille(struct ExpressionA* ast);
 
-int main(void)
+int main(int argc, char* argv[])
 {
+    extern FILE* yyin;
+    if(argc > 1){
+        if(!(yyin = fopen(argv[1], "r"))){
+            fprintf(stderr, "Impossible d'ouvrir le fichier depuis lequel lire l'expression à parser!");
+            exit(1);
+        }
+    } else{
+        yyin = stdin;
+    }
 	
 	struct ExpressionA* ast = (struct  ExpressionA*)malloc( sizeof( struct  ExpressionA ) );
 	ast->taille = 0;
+    
 	yyparse(ast);
 	ast = parcours_taille(ast);
 	if((fichier = fopen("code.jsm", "w")) == NULL){
