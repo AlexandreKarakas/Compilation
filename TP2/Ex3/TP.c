@@ -28,6 +28,7 @@ int main(void)
 		fclose(fichier);
 	}
 	print2D(ast);
+
 }
 
 void print2DUtil(struct ExpressionA* root, int space){

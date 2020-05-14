@@ -71,6 +71,12 @@ Programme * newProgramme(char * sym, struct ExpressionA* left, struct Expression
 %token <or> Ou
 %token <diff> Diff
 %token <pow> pow
+%token <si> Si
+%token <sinon> Sinon
+%token <tq> TantQue
+%token <pr> Pour
+%token <fr> Faire
+%token <ecrire> ecrire
 
 
 %left '+' '-'
@@ -89,9 +95,15 @@ programme :
 
 commande :
    ;
+  |'{' programme '}'
   | expression;
-  | IDENT '=' expression; 
-
+  | Si '(' expression ')' commande
+  | Si '(' expression ')' Sinon commande
+  | TantQue '(' expression ')' commande
+  | Faire commande TantQue '(' expression ')'
+  | Pour '(' expression ';' expression ';' expression ')' commande
+  | ecrire '(' expression ')'
+ 
 expression:  
    expression '+' expression    {$$ = newExpression("+",$1,NULL,$3,0);}
   | expression '-' expression    {$$ = newExpression("-_op",$1,NULL,$3,0);}

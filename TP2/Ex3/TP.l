@@ -3,11 +3,12 @@
 %{
 /* fichier dans lequel est defini la macro constante NOMBRE */
 #include "TP.tab.h"
+#include <string.h>
 %}
 %%
 [0-9]+ {yylval.num=atoi(yytext); return NOMBRE;}
 ([0-9]*[.])?[0-9]+ {yylval.num=atof(yytext); return NOMBRE;}
-[a-z][a-z,A-Z,0-9,_,'-']* {yylval.id = yytext; return IDENT;}
+[a-z][a-z,A-Z,0-9,_,'-']* {yylval.id = malloc(yyleng); strcpy(yylval.id, yytext); return IDENT;}
 "Vrai" {yylval.num=1; return BOOLEAN;}
 "Faux" {yylval.num=0; return BOOLEAN;}
 "<=" return infEgal;
@@ -17,6 +18,12 @@
 "||" return Ou;
 "!==" return Diff;
 "**" return pow;
+"Si" return Si;
+"Sinon" return Sinon;
+"TantQue" return TantQue;
+"Faire" return Faire;
+"Pour" return Pour;
+"ecrire" return ecrire;
 
 [ \t] ; /* ignore les blancs et tabulations */
 \n return 0;

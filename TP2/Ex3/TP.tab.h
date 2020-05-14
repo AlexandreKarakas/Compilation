@@ -59,7 +59,13 @@ extern int yydebug;
     Ou = 265,
     Diff = 266,
     pow = 267,
-    MOINSU = 268
+    Si = 268,
+    Sinon = 269,
+    TantQue = 270,
+    Pour = 271,
+    Faire = 272,
+    ecrire = 273,
+    MOINSU = 274
   };
 #endif
 
@@ -74,7 +80,7 @@ union YYSTYPE
   int bl;
   char *id;
 
-#line 78 "TP.tab.h"
+#line 84 "TP.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
