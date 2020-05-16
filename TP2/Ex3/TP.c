@@ -154,7 +154,7 @@ void parcours(struct ExpressionA* ast){
 			if (strncmp(ast->sym, "0", 1) == 0) 
 				fprintf(fichier, "CstRe %d\n",  ast->val);
 			else if (strncmp(ast->sym, "id", 2) == 0)
-				fprintf(fichier, "%s", ast->id);
+				fprintf(fichier, "%s\n", ast->id);
     	}
 
   	}

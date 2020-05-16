@@ -43,6 +43,10 @@ struct Commande* newCommand(char *sym, struct ExpressionA* left, struct Expressi
   return cmd;
 }
 
+struct ExpressionA* commande (struct commande * a){
+  return a->exp;
+}
+
 Programme * newProgramme(char * sym, struct ExpressionA* left, struct ExpressionA* middle, struct ExpressionA* right, int val, char* ident){
   Programme * prg =(Programme *)malloc(sizeof( Programme *));
   prg->cmd = newCommand(sym, left, middle, right, val, ident);
@@ -97,12 +101,12 @@ commande :
    ;
   |'{' programme '}'
   | expression;
-  | Si '(' expression ')' commande
+  | Si '(' expression ')' commande                                    {$$ = newExpression("Si", $3, NULL, commande(newCommand("Si", $5, NULL, NULL,NULL,NULL)) );}
   | Si '(' expression ')' Sinon commande
   | TantQue '(' expression ')' commande
   | Faire commande TantQue '(' expression ')'
   | Pour '(' expression ';' expression ';' expression ')' commande
-  | ecrire '(' expression ')'
+  | ecrire '(' expression ')' ;
  
 expression:  
    expression '+' expression    {$$ = newExpression("+",$1,NULL,$3,0);}

@@ -1,2 +1,3 @@
 CstRe 9
-SetVar xHalt
+SetVar xxxxxxx
+Halt
