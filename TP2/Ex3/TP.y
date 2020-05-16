@@ -33,12 +33,12 @@ struct ExpressionA* newExpression2 (char *sym, struct ExpressionA* left, struct 
 struct Commande* newCommand(char *sym, struct ExpressionA* left, struct ExpressionA* middle, struct ExpressionA* right, int val, char *ident){
   struct Commande* cmd = (struct Commande*)malloc(sizeof(struct Commande));
   if(cmd){
-    strcpy(cmd->exp.sym, sym);
-    cmd->exp.left = left;
-    cmd->exp.middle = middle;
-    cmd->exp.right = right;
-    cmd->exp.val = val;
-    strcpy(cmd->exp.id, ident);
+    strcpy(cmd->exp->sym, sym);
+    cmd->exp->left = left;
+    cmd->exp->middle = middle;
+    cmd->exp->right = right;
+    cmd->exp->val = val;
+    strcpy(cmd->exp->id, ident);
   }
   return cmd;
 }
@@ -64,6 +64,7 @@ Programme * newProgramme(char * sym, struct ExpressionA* left, struct Expression
 }
 
 %type <expA> expression
+%type <expA> commande
 
 %token <num> NOMBRE
 %token <bl> BOOLEAN
@@ -75,12 +76,12 @@ Programme * newProgramme(char * sym, struct ExpressionA* left, struct Expression
 %token <or> Ou
 %token <diff> Diff
 %token <pow> pow
-%token <si> Si
+%token <expA> Si
 %token <sinon> Sinon
-%token <tq> TantQue
-%token <pr> Pour
-%token <fr> Faire
-%token <ecrire> ecrire
+%token <expA> TantQue
+%token <expA> Pour
+%token <expA> Faire
+%token <expA> ecrire
 
 
 %left '+' '-'
@@ -102,7 +103,7 @@ commande :
   |'{' programme '}'
   | expression;
   | Si '(' expression ')' commande                                    {$$ = newExpression("Si", $3, NULL, commande(newCommand("Si", $5, NULL, NULL,NULL,NULL)) );}
-  | Si '(' expression ')' Sinon commande
+  | Si '(' expression ')'commande Sinon commande
   | TantQue '(' expression ')' commande
   | Faire commande TantQue '(' expression ')'
   | Pour '(' expression ';' expression ';' expression ')' commande

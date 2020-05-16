@@ -101,14 +101,18 @@ struct ExpressionA* newExpression2 (char *sym, struct ExpressionA* left, struct 
 struct Commande* newCommand(char *sym, struct ExpressionA* left, struct ExpressionA* middle, struct ExpressionA* right, int val, char *ident){
   struct Commande* cmd = (struct Commande*)malloc(sizeof(struct Commande));
   if(cmd){
-    strcpy(cmd->exp.sym, sym);
-    cmd->exp.left = left;
-    cmd->exp.middle = middle;
-    cmd->exp.right = right;
-    cmd->exp.val = val;
-    strcpy(cmd->exp.id, ident);
+    strcpy(cmd->exp->sym, sym);
+    cmd->exp->left = left;
+    cmd->exp->middle = middle;
+    cmd->exp->right = right;
+    cmd->exp->val = val;
+    strcpy(cmd->exp->id, ident);
   }
   return cmd;
+}
+
+struct ExpressionA* commande (struct commande * a){
+  return a->exp;
 }
 
 Programme * newProgramme(char * sym, struct ExpressionA* left, struct ExpressionA* middle, struct ExpressionA* right, int val, char* ident){
@@ -117,7 +121,7 @@ Programme * newProgramme(char * sym, struct ExpressionA* left, struct Expression
   prg->suivant = NULL;
 }
 
-#line 121 "TP.tab.c"
+#line 125 "TP.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -189,14 +193,14 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 55 "TP.y"
+#line 59 "TP.y"
 
   struct ExpressionA* expA;
   int num;
   int bl;
   char *id;
 
-#line 200 "TP.tab.c"
+#line 204 "TP.tab.c"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -571,11 +575,11 @@ static const yytype_int8 yytranslate[] =
 
 #if YYDEBUG
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
-static const yytype_int8 yyrline[] =
+static const yytype_uint8 yyrline[] =
 {
-       0,    90,    90,   108,   109,   110,   111,   112,   113,   114,
-     115,   116,   117,   118,   119,   120,   121,   122,   123,   124,
-     125
+       0,    95,    95,   113,   114,   115,   116,   117,   118,   119,
+     120,   121,   122,   123,   124,   125,   126,   127,   128,   129,
+     130
 };
 #endif
 
@@ -1409,121 +1413,121 @@ yyreduce:
   switch (yyn)
     {
   case 2:
-#line 90 "TP.y"
+#line 95 "TP.y"
                                  {*ast = *(yyvsp[0].expA);}
-#line 1415 "TP.tab.c"
+#line 1419 "TP.tab.c"
     break;
 
   case 3:
-#line 108 "TP.y"
+#line 113 "TP.y"
                                 {(yyval.expA) = newExpression("+",(yyvsp[-2].expA),NULL,(yyvsp[0].expA),0);}
-#line 1421 "TP.tab.c"
+#line 1425 "TP.tab.c"
     break;
 
   case 4:
-#line 109 "TP.y"
+#line 114 "TP.y"
                                  {(yyval.expA) = newExpression("-_op",(yyvsp[-2].expA),NULL,(yyvsp[0].expA),0);}
-#line 1427 "TP.tab.c"
+#line 1431 "TP.tab.c"
     break;
 
   case 5:
-#line 110 "TP.y"
+#line 115 "TP.y"
                                              {(yyval.expA) = newExpression("?:", (yyvsp[-4].expA), (yyvsp[-2].expA), (yyvsp[0].expA), 0);}
-#line 1433 "TP.tab.c"
+#line 1437 "TP.tab.c"
     break;
 
   case 6:
-#line 111 "TP.y"
+#line 116 "TP.y"
                                  {(yyval.expA) = newExpression("===",(yyvsp[-2].expA),NULL,(yyvsp[0].expA),0);}
-#line 1439 "TP.tab.c"
+#line 1443 "TP.tab.c"
     break;
 
   case 7:
-#line 112 "TP.y"
+#line 117 "TP.y"
                                  {(yyval.expA) = newExpression("<=",(yyvsp[-2].expA),NULL,(yyvsp[0].expA),0);}
-#line 1445 "TP.tab.c"
+#line 1449 "TP.tab.c"
     break;
 
   case 8:
-#line 113 "TP.y"
+#line 118 "TP.y"
                                  {(yyval.expA) = newExpression(">=",(yyvsp[-2].expA),NULL,(yyvsp[0].expA),0);}
-#line 1451 "TP.tab.c"
+#line 1455 "TP.tab.c"
     break;
 
   case 9:
-#line 114 "TP.y"
+#line 119 "TP.y"
                                  {(yyval.expA) = newExpression("&&",(yyvsp[-2].expA),NULL,(yyvsp[0].expA),0);}
-#line 1457 "TP.tab.c"
+#line 1461 "TP.tab.c"
     break;
 
   case 10:
-#line 115 "TP.y"
+#line 120 "TP.y"
                                  {(yyval.expA) = newExpression("!==",(yyvsp[-2].expA),NULL,(yyvsp[0].expA),0);}
-#line 1463 "TP.tab.c"
+#line 1467 "TP.tab.c"
     break;
 
   case 11:
-#line 116 "TP.y"
+#line 121 "TP.y"
                                  {(yyval.expA) = newExpression("*",(yyvsp[-2].expA),NULL,(yyvsp[0].expA),0);}
-#line 1469 "TP.tab.c"
+#line 1473 "TP.tab.c"
     break;
 
   case 12:
-#line 117 "TP.y"
+#line 122 "TP.y"
                                  {(yyval.expA) = newExpression("/",(yyvsp[-2].expA),NULL,(yyvsp[0].expA),0);}
-#line 1475 "TP.tab.c"
+#line 1479 "TP.tab.c"
     break;
 
   case 13:
-#line 118 "TP.y"
+#line 123 "TP.y"
                                  {(yyval.expA) = newExpression("%",(yyvsp[-2].expA),NULL,(yyvsp[0].expA),0);}
-#line 1481 "TP.tab.c"
+#line 1485 "TP.tab.c"
     break;
 
   case 14:
-#line 119 "TP.y"
+#line 124 "TP.y"
                                  {(yyval.expA) = newExpression(">", (yyvsp[-2].expA),NULL,(yyvsp[0].expA),0);}
-#line 1487 "TP.tab.c"
+#line 1491 "TP.tab.c"
     break;
 
   case 15:
-#line 120 "TP.y"
+#line 125 "TP.y"
                                  {(yyval.expA) = (yyvsp[-1].expA);}
-#line 1493 "TP.tab.c"
+#line 1497 "TP.tab.c"
     break;
 
   case 16:
-#line 121 "TP.y"
+#line 126 "TP.y"
                                  {(yyval.expA) = newExpression("-_unaire",(yyvsp[0].expA),NULL,NULL,0);}
-#line 1499 "TP.tab.c"
+#line 1503 "TP.tab.c"
     break;
 
   case 17:
-#line 122 "TP.y"
+#line 127 "TP.y"
                                  {(yyval.expA) = newExpression("=",newExpression2("id", NULL, NULL, NULL, NULL, (yyvsp[-2].id)), NULL,(yyvsp[0].expA),0);}
-#line 1505 "TP.tab.c"
+#line 1509 "TP.tab.c"
     break;
 
   case 18:
-#line 123 "TP.y"
+#line 128 "TP.y"
                                  {(yyval.expA) = newExpression("0",NULL,NULL,NULL,(yyvsp[0].num));}
-#line 1511 "TP.tab.c"
+#line 1515 "TP.tab.c"
     break;
 
   case 19:
-#line 124 "TP.y"
+#line 129 "TP.y"
                                  {if ((yyvsp[0].bl) == 1) (yyval.expA) = newExpression("Vrai",NULL,NULL,NULL,(yyvsp[0].bl)); else (yyval.expA) = newExpression("Faux", NULL,NULL, NULL, (yyvsp[0].bl));}
-#line 1517 "TP.tab.c"
+#line 1521 "TP.tab.c"
     break;
 
   case 20:
-#line 125 "TP.y"
+#line 130 "TP.y"
                                  {(yyval.expA) = newExpression2("id", NULL, NULL, NULL, NULL, (yyvsp[0].id));}
-#line 1523 "TP.tab.c"
+#line 1527 "TP.tab.c"
     break;
 
 
-#line 1527 "TP.tab.c"
+#line 1531 "TP.tab.c"
 
       default: break;
     }
@@ -1755,7 +1759,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 128 "TP.y"
+#line 133 "TP.y"
 
 
 #include <stdio.h>

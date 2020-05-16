@@ -15,7 +15,7 @@ struct ExpressionA {
 
 
 struct Commande {
-  struct ExpressionA exp;
+  struct ExpressionA *exp;
 };
 
 typedef struct Programme Programme;
