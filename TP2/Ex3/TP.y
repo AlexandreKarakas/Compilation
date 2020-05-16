@@ -43,7 +43,7 @@ struct Commande* newCommand(char *sym, struct ExpressionA* left, struct Expressi
   return cmd;
 }
 
-struct ExpressionA* commande (struct commande * a){
+struct ExpressionA* commande (struct Commande * a){
   return a->exp;
 }
 

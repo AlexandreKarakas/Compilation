@@ -151,7 +151,7 @@ void parcours(struct ExpressionA* ast){
 			fprintf(fichier, "GreEqR\n");
 		}
       	else{
-			if (strncmp(ast->sym, "0", 1) == 0) 
+			if (strncmp(ast->sym, "0", 1) == 0 ||strncmp(ast->sym, "Vrai", 4) == 0 ||strncmp(ast->sym, "Faux", 4) == 0) 
 				fprintf(fichier, "CstRe %d\n",  ast->val);
 			else if (strncmp(ast->sym, "id", 2) == 0)
 				fprintf(fichier, "%s\n", ast->id);
