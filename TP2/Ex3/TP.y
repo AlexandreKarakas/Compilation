@@ -101,13 +101,13 @@ programme :
 commande :
    ;
   |'{' programme '}'
-  | expression;
-  | Si '(' expression ')' commande                                    {$$ = newExpression("Si", $3, NULL, commande(newCommand("Si", $5, NULL, NULL,NULL,NULL)) );}
-  | Si '(' expression ')'commande Sinon commande
+  | expression ';'                                                    {$$ = newExpression("exp", $1, NULL, NULL, NULL);}
+  | Si '(' expression ')' commande                                    {$$ = newCommand("Si", $3, NULL, commande(newCommand("Si", $5, NULL, NULL,NULL,NULL)));}
+  | Si '(' expression ')'commande Sinon commande                      {$$ = newCommand("SiSinon", $3, commande($5), commande($7), NULL, NULL);}
   | TantQue '(' expression ')' commande
   | Faire commande TantQue '(' expression ')'
   | Pour '(' expression ';' expression ';' expression ')' commande
-  | ecrire '(' expression ')' ;
+  | ecrire '(' expression ')' ';'
  
 expression:  
    expression '+' expression    {$$ = newExpression("+",$1,NULL,$3,0);}
