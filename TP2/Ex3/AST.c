@@ -18,6 +18,38 @@ struct Commande {
   struct ExpressionA *exp;
 };
 
+struct Si {
+  struct ExpressionA *exp;
+  struct Commande * cmd;
+};
+
+struct SiSinon {
+  struct Expression *exp;
+  struct Commande *cmd1;
+  struct Commande *cmd2;
+};
+
+struct TantQue {
+  struct Expression *exp;
+  struct Commande *cmd;
+};
+
+struct Faire{
+  struct Commande *cmd;
+  struct Expression *exp;
+};
+
+struct Pour{
+  struct Expression *exp1;
+  struct Expression *exp2;
+  struct Expression *exp3;
+  struct Commande *cmd;
+};
+
+struct Ecrire{
+  struct Expression *exp;
+};
+
 typedef struct Programme Programme;
 struct Programme {
   struct Commande *cmd;

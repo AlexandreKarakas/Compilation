@@ -60,6 +60,25 @@ struct ExpressionA* commande (struct Commande * a){
   return a->exp;
 }
 
+struct Si*  newSi(struct ExpressionA * exp, struct Commande * cmd){
+  struct Si *si =(struct Si*)malloc(sizeof(struct Si));
+  if (si){
+    si->exp = exp;
+    si->cmd = cmd;
+  }
+  return si; 
+}
+
+struct SiSinon * newSiSinon(struct ExpressionA * exp, struct Commande* cmd1, struct Commande *cmd2){
+  struct SiSinon* sisinon = (struct SiSinon *)malloc(sizeof(struct SiSinon));
+  if (sisinon){
+    sisinon->exp = exp;
+    sisinon->cmd1 = cmd1;
+    sisinon->cmd2 = cmd2;
+  }
+  return sisinon;
+}
+
 Programme * newProgramme(char * sym, struct ExpressionA* left, struct ExpressionA* middle, struct ExpressionA* right, int val, char* ident){
   Programme * prg =(Programme *)malloc(sizeof( Programme *));
   prg->cmd = newCommand(sym, left, middle, right, val, ident);
