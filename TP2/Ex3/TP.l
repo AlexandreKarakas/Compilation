@@ -5,29 +5,32 @@
 #include "TP.tab.h"
 #include <string.h>
 %}
-%%
-[0-9]+ {yylval.num=atoi(yytext); return NOMBRE;}
-([0-9]*[.])?[0-9]+ {yylval.num=atof(yytext); return NOMBRE;}
-[a-z][a-z,A-Z,0-9,_,'-']* {yylval.id = malloc(yyleng); strcpy(yylval.id, yytext); return IDENT;}
-"Vrai" {yylval.num=1; return BOOLEAN;}
-"Faux" {yylval.num=0; return BOOLEAN;}
-"<=" return infEgal;
-"===" return Equals;
-">=" return supEgal;
-"&&" return Et;
-"||" return Ou;
-"!==" return Diff;
-"**" return pow;
-"Si" return Si;
-"Sinon" return Sinon;
-"TantQue" return TantQue;
-"Faire" return Faire;
-"Pour" return Pour;
-"ecrire" return ecrire;
 
-[ \t] ; /* ignore les blancs et tabulations */
-\n return 0;
-. return yytext[0];
+%%
+[0-9]+                      yylval.num=atoi(yytext); return NOMBRE;
+([0-9]*[.])?[0-9]+          yylval.num=atof(yytext); return NOMBRE;
+[a-z][a-z,A-Z,0-9,_,'-']*   yylval.id = malloc(yyleng); strcpy(yylval.id, yytext); return IDENT;
+"Vrai"                      yylval.num=1; return BOOLEEN;
+"Faux"                      yylval.num=0; return BOOLEEN;
+"<="                        return EST_INFERIEUR_OU_EGAL_A;
+">="                        return EST_SUPERIEUR_OU_EGAL_A;
+"==="                       return EST_EGAL_A;
+"!=="                       return EST_DIFFERENT_DE;
+"&&"                        return ET;
+"||"                        return OU;
+"**"                        return PUISSANCE;
+"Si"                        return SI;
+"Sinon"                     return SINON;
+"TantQue"                   return TANT_QUE;
+"Faire"                     return FAIRE;
+"Pour"                      return POUR;
+"Ecrire"                    return ECRIRE;
+[ \n]                       return 0; /* ignore les fins de ligne */
+[ \t]+                      return 0; /* ignore les blancs et tabulations */
+.                           return (int) yytext[0];
+"//"                        return COMMENTAIRE_UNILIGNE;
+"/*"                        return DEB_COMMENTAIRE_MULTILIGNE;
+"*/"                        return FIN_COMMENTAIRE_MULTILIGNE;
 %%
 
 #include <stdio.h>

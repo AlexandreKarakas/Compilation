@@ -50,22 +50,25 @@ extern int yydebug;
   enum yytokentype
   {
     NOMBRE = 258,
-    BOOLEAN = 259,
-    infEgal = 260,
-    Equals = 261,
+    BOOLEEN = 259,
+    EST_INFERIEUR_OU_EGAL_A = 260,
+    EST_EGAL_A = 261,
     IDENT = 262,
-    supEgal = 263,
-    Et = 264,
-    Ou = 265,
-    Diff = 266,
-    pow = 267,
-    Si = 268,
-    Sinon = 269,
-    TantQue = 270,
-    Pour = 271,
-    Faire = 272,
-    ecrire = 273,
-    MOINSU = 274
+    EST_SUPERIEUR_OU_EGAL_A = 263,
+    ET = 264,
+    OU = 265,
+    EST_DIFFERENT_DE = 266,
+    PUISSANCE = 267,
+    SI = 268,
+    SINON = 269,
+    TANT_QUE = 270,
+    POUR = 271,
+    FAIRE = 272,
+    ECRIRE = 273,
+    COMMENTAIRE_UNILIGNE = 274,
+    DEB_COMMENTAIRE_MULTILIGNE = 275,
+    FIN_COMMENTAIRE_MULTILIGNE = 276,
+    MOINSU = 277
   };
 #endif
 
@@ -73,14 +76,14 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 59 "TP.y"
+#line 72 "TP.y"
 
   struct ExpressionA* expA;
   int num;
   int bl;
   char *id;
 
-#line 84 "TP.tab.h"
+#line 87 "TP.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
