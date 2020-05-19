@@ -9,6 +9,8 @@ FILE* fichier;
 
 void parcours(struct ExpressionA* ast);
 struct ExpressionA* parcours_taille(struct ExpressionA* ast);
+void print2DUtil(struct ExpressionA* root, int space);
+void print2D(struct ExpressionA* root);
 
 int main(int argc, char* argv[])
 {

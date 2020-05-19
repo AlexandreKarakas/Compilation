@@ -1,3 +1,2 @@
-bison -d TP.y
+bison -d TP.y --debug
 flex TP.l
-gcc -g -o Programme TP.c TP.tab.c lex.yy.c
