@@ -1,36 +1,53 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include <stdarg.h>
 #include <string.h>
+#include "ast.h"
 
-typedef struct Node Node;
-struct Node{
-  char type[]; // Type du noeud (ex : IF) (ptet rajouter un enum pour programme/commande/expression)
-  int height; // Taille du noeud
-  Node* childNodes; // Liste des noeuds enfants
+Node* newOperation(int, int, ...);
+Node* newConst(int);
+Node* newIdent(char*);
 
-  union value{
-    char* sVal; // A string value
-    char cVal; // A char value
-    int iVal; // An integer value
-  };
-};
-
-Node* newNode(char* type, union value* value, ...);
-
-
-
-Node* newNode(char** type, union value* value, ...){
+Node* newOperation(int type, int nops, ...){
   Node* node;
   va_list ap;
-  size_t i, nodeSize;
 
-  node = (Node*) malloc(sizeof(Node));
-  if(!node) return NULL;
+  if(!(node = (Node*) malloc(sizeof(Node)))) return NULL;
 
-  node->type = malloc(strlen(*type)+1);
-  strcpy(node->type, *type);
+  node->type = type;
 
+  node->value = (union Value*) malloc(sizeof(union Value));
+  va_start(ap, nops);
+  for(int i=0;i<nops;i++){
+    node->childs[i] = va_arg(ap, Node*);
+  }
+  va_end(ap);
 
+  return node;
+}
+
+Node* newConst(int n){
+  Node* node;
+  if(!(node = (Node*) malloc(sizeof(Node)))) return NULL;
+
+  node->type = 0;
+
+  node->value = (union Value*) malloc(sizeof(union Value));
+  node->value->iVal = n;
+
+  return node;
+}
+
+Node* newIdent(char* id){
+  Node* node;
+  if(!(node = (Node*) malloc(sizeof(Node)))) return NULL;
+
+  node->type = 1;
+
+  node->value = (union Value*) malloc(sizeof(union Value));
+  node->value->sVal = id;
+
+  return node;
 }
 
 

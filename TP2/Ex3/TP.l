@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "ast.h"
 #include "TP.tab.h"
 %}
 
@@ -29,7 +30,7 @@
 "Faire"                               return FAIRE;
 "Pour"                                return POUR;
 "Ecrire"                              return ECRIRE;
-"typeof"                              return TYPEOF;
+"Typeof"                              return TYPEOF;
 [ \n]                                 return 0; /* ignore les fins de ligne */
 .                                     return (int) yytext[0];
 %%
@@ -37,13 +38,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-commenteof()
+int commenteof()
 {
   fprintf (stderr, "unexpected EOF inside comment");
   exit (1);
 }
 
-yywrap ()
+int yywrap()
 {
   return (1);
 }

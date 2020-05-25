@@ -1,33 +1,43 @@
-/*fichier calc.c */
-
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "AST.c"
-FILE* fichier;
+#include "ast.h"
 
-void parcours(struct ExpressionA* ast);
-struct ExpressionA* parcours_taille(struct ExpressionA* ast);
-void print2DUtil(struct ExpressionA* root, int space);
-void print2D(struct ExpressionA* root);
+FILE* output;
+
+int yyparse();
+void search(Node*);
 
 int main(int argc, char* argv[])
 {
     extern FILE* yyin;
     if(argc > 1){
         if(!(yyin = fopen(argv[1], "r"))){
-            fprintf(stderr, "Impossible d'ouvrir le fichier depuis lequel lire l'expression à parser!");
+            fprintf(stderr, "Impossible d'ouvrir le fichier depuis lequel lire l'expression à parser!\n");
             exit(1);
         }
     } else{
         yyin = stdin;
     }
 
-	struct ExpressionA* ast = (struct  ExpressionA*)malloc( sizeof( struct  ExpressionA ) );
-	ast->taille = 0;
+    Node* ast = (Node*) malloc(sizeof(Node));
+    yyparse(ast);
 
-	yyparse(ast);
+    // Si le fichier donné en lecture n'a pas pu être ouvert, on quitte le programme
+    if(!(output = fopen("code.jsm", "w"))){
+      fprintf(stderr, "Impossible d'ouvrir le fichier donné en lecture\n");
+  		exit(1);
+    }
+
+    search(ast);
+    fprintf(output, "Halt\n");
+    fclose(output);
+
+    return EXIT_SUCCESS;
+
+
+/*
+
 	ast = parcours_taille(ast);
 	if((fichier = fopen("code.jsm", "w")) == NULL){
 		fprintf(stderr, "Impossible d'ouvrir le fichier donné en lecture\n");
@@ -38,13 +48,16 @@ int main(int argc, char* argv[])
 		fprintf(fichier, "Halt\n");
 		fclose(fichier);
 	}
-	print2D(ast);
+	print2D(ast);*/
 }
 
 void search(Node* ast){
-
+  if(!ast) return;
+  for(int i=0; i<4; i++)
+    search(ast->childs[i]);
+  fprintf(output, "TEST\n");
 }
-
+/*
 void parcours(struct ExpressionA* ast){
 	int taille = 0;
 
@@ -105,13 +118,13 @@ void parcours(struct ExpressionA* ast){
 			fprintf(fichier, "SetVar ");
 			parcours(ast->left);
 	}
-
+*/
 	/*else if (strncmp(ast->sym, "&&", 2) == 0){
 			parcours(ast->left);
 			parcours(ast->right);
 			fprintf(fichier, "MultiRe\n");
 	}*/
-
+/*
 	else if (strncmp(ast->sym, "!==", 3) == 0){
 			parcours(ast->left);
 			parcours(ast->right);
@@ -162,34 +175,4 @@ struct ExpressionA* parcours_taille(struct ExpressionA* ast){
 		ast->taille = 1;
   	}
 	return ast;
-}
-
-void print2DUtil(struct ExpressionA* root, int space){
-	if(root == NULL) return;
-
-	space += 10;
-
-	print2DUtil(root->right, space);
-
-	printf("\n");
-	for(int i=10; i<space; i++)
-		printf(" ");
-	if(strncmp(root->sym, "0", 1) == 0)
-		printf("%d", root->val);
-	else if (strncmp(root->sym, "id", 2) == 0)
-		printf("%s", root->id);
-	else
-		printf("%s", root->sym);
-
-	if(root->middle != NULL) {
-		print2DUtil(root->middle, space-1);
-
-	}
-			printf("\n");
-
-	print2DUtil(root->left, space);
-}
-
-void print2D(struct ExpressionA* root){
-	print2DUtil(root, 0);
-}
+}*/

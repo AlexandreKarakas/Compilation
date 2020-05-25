@@ -4,28 +4,39 @@
 #include "AST.c"
 #include <string.h>
 
-int yyerror(const char*);
+int yylex();
+int yyerror(Node*, const char*);
 extern int yylineno;
-
-
-
+int yyparse();
 %}
 
-%parse-param {struct Programme* ast}
+%parse-param {Node* root}
 
 %union {
-  struct Node* nodePtr;
+  Node* nodePtr;
   int num;
+  int operator;
   int bool;
   char *id;
 }
 
-%type <expA> expression
-%type <expA> commande
-%type programme
+%type <nodePtr> expression commande programme
+%type <operator> op_unaire
+%type <operator> op_binaire
+%type assigne
 
 %token <num> NOMBRE
 %token <bool> BOOLEEN
+%token <id> IDENT
+
+%token <operator> '+'
+%token <operator> '-'
+%token <operator> '!'
+%token <operator> '*'
+%token <operator> '/'
+%token <operator> '%'
+%token <operator> '>'
+%token <operator> '<'
 %token <operator> EST_INFERIEUR_OU_EGAL_A
 %token <operator> EST_EGAL_A
 %token <operator> EST_SUPERIEUR_OU_EGAL_A
@@ -34,14 +45,16 @@ extern int yylineno;
 %token <operator> EST_DIFFERENT_DE
 %token <operator> PUISSANCE
 %token <operator> TYPEOF
-%token <expA> IDENT
-%token <expA> SI
-%token <expA> SINON
-%token <expA> TANT_QUE
-%token <expA> POUR
-%token <expA> FAIRE
-%token <expA> ECRIRE
 
+%token SI
+%token SINON
+%token TANT_QUE
+%token POUR
+%token FAIRE
+%token ECRIRE
+
+%nonassoc SANS_SINON
+%nonassoc SINON
 %right '='
 %right '?' ':'
 %left OU
@@ -55,32 +68,31 @@ extern int yylineno;
 %%
 
 programme :
-    commande
+    commande            {*root = *$$;}
   | commande programme
   ;
 
 commande :
-   ';'
-  |'{' programme '}'
-  | expression ';'
-  | SI '(' expression ')' commande                                    {$$ = newSi($3,$5);}
-  | SI '(' expression ')' commande SINON commande                     {$$ = newSiSinon($3,$5,$7);}
-  | TANT_QUE '(' expression ')' commande                              {$$ = newTantQue($3,$5);}
-  | FAIRE commande TANT_QUE '(' expression ')'                        {$$ = newFaireTq($2,$5);}
-  | POUR '(' expression ';' expression ';' expression ')' commande    {$$ = newPour($3,$5,$7,$9);}
-  | ECRIRE '(' expression ')' ';'                                     {$$ = newEcrire($3);}
+   ';'                                                                {$$ = newOperation(';',0);}
+  |'{' programme '}'                                                  {$$ = $2;}
+  | expression ';'                                                    {$$ = $1;}
+  | SI '(' expression ')' commande    %prec SANS_SINON                {$$ = newOperation(SI,2,$3,$5);}
+  | SI '(' expression ')' commande SINON commande                     {$$ = newOperation(SI,3,$3,$5,$7);}
+  | TANT_QUE '(' expression ')' commande                              {$$ = newOperation(TANT_QUE,2,$3,$5);}
+  | FAIRE commande TANT_QUE '(' expression ')'                        {$$ = newOperation(FAIRE,2,$2,$5);}
+  | POUR '(' expression ';' expression ';' expression ')' commande    {$$ = newOperation(POUR,4,$3,$5,$7,$9);}
+  | ECRIRE '(' expression ')' ';'                                     {$$ = newOperation(ECRIRE,1,$3);}
   ;
 
 expression:
-    NOMBRE                                          {$$ = newExpression("0",NULL,NULL,$1);}
-  | BOOLEEN                                         {if ($$ == 1) $$ = newExpression("Vrai",NULL,NULL,$1); else $$ = newExpression("Faux", NULL, NULL, $1);}
-  | IDENT                                           {$$ = newExpression2("id", NULL, NULL, NULL, NULL, $1);}
-  | '(' expression ')'                              {$$ = $2;}
-  | op_unaire expression %prec UNAIRE
-  | expression op_binaire expression
-  | expression '?' expression ':' expression        {$$ = newExpression1("?:",$1,$3,$5,0);}
-  | '-' expression %prec MOINSU                     {$$ = newExpression("-",newExpression("0",NULL,NULL,0),$2,0);}
-  | IDENT '=' expression                            {$$ = newExpression("=",newExpression2("id", NULL, NULL, NULL, NULL, $1),$3,0);}
+    NOMBRE                                                            {$$ = newConst($1);}
+  | BOOLEEN                                                           {$$ = newConst($1);}
+  | IDENT                                                             {$$ = newIdent($1);}
+  | '(' expression ')'                                                {$$ = $2;}
+  | op_unaire expression %prec UNAIRE                                 {$$ = newOperation($1,1,$2);}
+  | expression op_binaire expression                                  {$$ = newOperation($2,2,$1,$3);}
+  | expression '?' expression ':' expression                          {$$ = newOperation('?',3,$1,$3,$5);}
+  | IDENT assigne expression                                          {$$ = newOperation(IDENT,2,$1,$3);}
   ;
 
 op_unaire: '-' | '!' | TYPEOF;
@@ -94,7 +106,7 @@ assigne: '=';
 
 #include <string.h>
 
-int yyerror(const char *s){
+int yyerror(Node* root, const char *s){
   extern int yylineno;
   fprintf(stderr, "Erreur de syntaxe ligne %d : %s\n", yylineno, s);
   return 0;
