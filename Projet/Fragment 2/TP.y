@@ -41,6 +41,11 @@ extern int yylineno;
 %token <expA> POUR
 %token <expA> FAIRE
 %token <expA> ECRIRE
+%token <expA> RETOURNER
+%token <expA> FONCTION
+%token <expA> BREAK
+%token <expA> VAR
+
 
 %right '='
 %right '?' ':'
@@ -54,21 +59,32 @@ extern int yylineno;
 
 %%
 
-programme :
+programme:
     commande
   | commande programme
   ;
 
-commande :
+commande:
    ';'
   |'{' programme '}'
+  | affect_expr ';'
+  | FONCTION IDENT '(' arguments ')' '{' programme '}'
   | expression ';'
+  | VAR IDENT '(' arguments ')' '{' programme '}'
   | SI '(' expression ')' commande                                    {$$ = newSi($3,$5);}
   | SI '(' expression ')' commande SINON commande                     {$$ = newSiSinon($3,$5,$7);}
+  | BREAK
   | TANT_QUE '(' expression ')' commande                              {$$ = newTantQue($3,$5);}
   | FAIRE commande TANT_QUE '(' expression ')'                        {$$ = newFaireTq($2,$5);}
+  | RETOURNER '(' expression ')' ';'
   | POUR '(' expression ';' expression ';' expression ')' commande    {$$ = newPour($3,$5,$7,$9);}
   | ECRIRE '(' expression ')' ';'                                     {$$ = newEcrire($3);}
+  ;
+
+affect_expr: 
+  expression
+  | VAR IDENT '=' expression
+  | VAR IDENT
   ;
 
 expression:
@@ -83,12 +99,22 @@ expression:
   | IDENT '=' expression                            {$$ = newExpression("=",newExpression2("id", NULL, NULL, NULL, NULL, $1),$3,0);}
   ;
 
+expressions:
+  | expression ',' expressions
+  ;
+
 op_unaire: '-' | '!' | TYPEOF;
 
 op_binaire: '+' | '-' | '*' | '/' | '%' | EST_EGAL_A | '>' | '<' | EST_DIFFERENT_DE | ET | OU | PUISSANCE | EST_SUPERIEUR_OU_EGAL_A | EST_INFERIEUR_OU_EGAL_A;
 
 assigne: '=';
 
+arguments:
+  | IDENT
+  | IDENT ',' arguments
+  | IDENT '=' expression
+  | IDENT '=' expression ',' arguments
+  ;
 
 %%
 
