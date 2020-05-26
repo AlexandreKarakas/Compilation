@@ -31,6 +31,10 @@
 "Pour"                                return POUR;
 "Ecrire"                              return ECRIRE;
 "Typeof"                              return TYPEOF;
+"Var"                                 return VAR;
+"Fonction"                            return FONCTION;
+"Break"                               return BREAK;
+"Retourner"                           return RETOURNER;
 [ \n]                                 return 0; /* ignore les fins de ligne */
 .                                     return (int) yytext[0];
 %%
