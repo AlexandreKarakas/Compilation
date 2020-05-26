@@ -1,41 +1,39 @@
+#ifndef AST_H_
+#define AST_H_
+
 /* ----- NODE TYPES ----- */
 
 typedef enum Node_type{
-  BASIC_NODE,
-  // Déclarations
-  DECL_NODE,
-  CONST_NODE,
-  // Commandes
-  STATEMENTS,
-  IF_NODE,
-  FOR_NODE,
-  WHILE_NODE,
-  DOWHILE_NODE,
-  ASSIGN_NODE,
-  SIMPLE_NODE,
-  INCR_NODE,
-  FUNCALL_NODE,
-  // Expressions
-  ARITHM_NODE,
-  BOOL_NODE,
-  REL_NODE,
-  EQU_NODE,
-  REF_NODE,
-  // Fonctions
-  FUNDECL_NODE,
-  RETURN_NODE
+    CONST_NODE, ID_NODE, OPER_NODE
 } Node_type;
+
+typedef struct {
+    int value;
+} Const_node;
+
+typedef struct {
+    char* name;
+} ID_node;
+
+typedef struct {
+    int type;
+    int nops;
+    struct Node* childs[4];
+} Oper_node;
 
 typedef struct Node Node;
 struct Node{
-  //enum Node_type type; // Type du noeud (ex : IF)
-  int type;
-  int height; // Taille du noeud
-  Node* childs[4]; // Liste des noeuds enfants
+  Node_type type; // Type du noeud (ex : IF)
 
   union Value{
-    char* sVal; // A string value
-    char cVal; // A char value
-    int iVal; // An integer value
+    Const_node cst;
+    ID_node id;
+    Oper_node oper;
   } *value;
 };
+
+Node* newOperation(int, int, ...);
+Node* newConst(int);
+Node* newIdent(char*);
+
+#endif /* AST_H_ */

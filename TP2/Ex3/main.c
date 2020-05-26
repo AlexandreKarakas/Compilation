@@ -25,8 +25,8 @@ int main(int argc, char* argv[])
 
     // Si le fichier donné en lecture n'a pas pu être ouvert, on quitte le programme
     if(!(output = fopen("code.jsm", "w"))){
-      fprintf(stderr, "Impossible d'ouvrir le fichier donné en lecture\n");
-  		exit(1);
+        fprintf(stderr, "Impossible d'ouvrir le fichier donné en lecture\n");
+        exit(1);
     }
 
     search(ast);
@@ -52,10 +52,12 @@ int main(int argc, char* argv[])
 }
 
 void search(Node* ast){
-  if(!ast) return;
-  for(int i=0; i<4; i++)
-    search(ast->childs[i]);
-  fprintf(output, "TEST\n");
+    if(!ast) return;
+    switch (ast->type) {
+        case CONST_NODE:
+
+    }
+    fprintf(output, "TEST\n");
 }
 /*
 void parcours(struct ExpressionA* ast){
@@ -119,11 +121,11 @@ void parcours(struct ExpressionA* ast){
 			parcours(ast->left);
 	}
 */
-	/*else if (strncmp(ast->sym, "&&", 2) == 0){
-			parcours(ast->left);
-			parcours(ast->right);
-			fprintf(fichier, "MultiRe\n");
-	}*/
+/*else if (strncmp(ast->sym, "&&", 2) == 0){
+        parcours(ast->left);
+        parcours(ast->right);
+        fprintf(fichier, "MultiRe\n");
+}*/
 /*
 	else if (strncmp(ast->sym, "!==", 3) == 0){
 			parcours(ast->left);

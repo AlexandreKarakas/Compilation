@@ -4,7 +4,7 @@
 #include <string.h>
 
 #include "ast.h"
-#include "TP.tab.h"
+#include "parser.tab.h"
 %}
 
 %%

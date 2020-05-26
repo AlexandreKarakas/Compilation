@@ -1,2 +1,2 @@
-bison -d TP.y --debug
-flex TP.l
+bison -d parser.y --debug
+flex lexer.l

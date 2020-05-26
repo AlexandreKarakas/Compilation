@@ -1,12 +1,6 @@
 #include <stdlib.h>
-#include <stdio.h>
 #include <stdarg.h>
-#include <string.h>
 #include "ast.h"
-
-Node* newOperation(int, int, ...);
-Node* newConst(int);
-Node* newIdent(char*);
 
 Node* newOperation(int type, int nops, ...){
   Node* node;
@@ -59,15 +53,15 @@ Node* newIdent(char* id){
 
 
 
-
+/*
 struct ExpressionA {
-  struct ExpressionA* left;    /* null si nombre */
-  struct ExpressionA* middle;  /* null si nombre */
-  struct ExpressionA* right;   /* null si nombre ou neg */
-  char sym[6];                 /* '+', '-', '/' ou '*' , quelconque si terme*/
-  int val;                     /* quelconque si <> nombre */
+  struct ExpressionA* left;    // null si nombre
+  struct ExpressionA* middle;  // null si nombre
+  struct ExpressionA* right;   // null si nombre ou neg
+  char sym[6];                 // '+', '-', '/' ou '*' , quelconque si terme
+  int val;                     // quelconque si <> nombre
   char id[24];
-  int taille;                  /* taille du noeud */
+  int taille;                  // taille du noeud
 };
 
 struct Commande {
@@ -111,3 +105,4 @@ struct Programme {
   struct Commande *cmd;
   Programme *suivant;
 };
+*/

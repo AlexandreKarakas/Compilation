@@ -1,7 +1,7 @@
 %define parse.error verbose
 
 %{
-#include "AST.c"
+#include "ast.c"
 #include <string.h>
 
 int yylex();
