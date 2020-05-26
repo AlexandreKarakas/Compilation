@@ -25,11 +25,11 @@ typedef struct Node Node;
 struct Node{
   Node_type type; // Type du noeud (ex : IF)
 
-  union Value{
+  union {
     Const_node cst;
     ID_node id;
     Oper_node oper;
-  } *value;
+  };
 };
 
 Node* newOperation(int, int, ...);

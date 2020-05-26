@@ -8,12 +8,13 @@ Node* newOperation(int type, int nops, ...){
 
   if(!(node = (Node*) malloc(sizeof(Node)))) return NULL;
 
-  node->type = type;
+  node->type = OPER_NODE;
+  node->oper.type = type;
+  node->oper.nops = nops;
 
-  node->value = (union Value*) malloc(sizeof(union Value));
   va_start(ap, nops);
   for(int i=0;i<nops;i++){
-    node->childs[i] = va_arg(ap, Node*);
+    node->oper.childs[i] = va_arg(ap, Node*);
   }
   va_end(ap);
 
@@ -24,10 +25,8 @@ Node* newConst(int n){
   Node* node;
   if(!(node = (Node*) malloc(sizeof(Node)))) return NULL;
 
-  node->type = 0;
-
-  node->value = (union Value*) malloc(sizeof(union Value));
-  node->value->iVal = n;
+  node->type = CONST_NODE;
+  node->cst.value = n;
 
   return node;
 }
@@ -36,10 +35,8 @@ Node* newIdent(char* id){
   Node* node;
   if(!(node = (Node*) malloc(sizeof(Node)))) return NULL;
 
-  node->type = 1;
-
-  node->value = (union Value*) malloc(sizeof(union Value));
-  node->value->sVal = id;
+  node->type = ID_NODE;
+  node->id.name = id;
 
   return node;
 }

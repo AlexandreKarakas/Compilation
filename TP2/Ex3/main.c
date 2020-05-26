@@ -55,7 +55,11 @@ void search(Node* ast){
     if(!ast) return;
     switch (ast->type) {
         case CONST_NODE:
-
+            break;
+        case ID_NODE:
+            break;
+        case OPER_NODE:
+            break;
     }
     fprintf(output, "TEST\n");
 }
