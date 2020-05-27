@@ -14,4 +14,4 @@ Pour notre compilateur, il faudra suivre plusieurs étapes :
 
 - Compiler le parseur avec la commande : bison -d parser.y
 
-- Puis on compile tous les fichiers avec la commande gcc -o AST.c parser.tab.c main.c lex.yy.c
+- Puis on compile tous les fichiers avec la commande gcc -o compilateur AST.c parser.tab.c main.c lex.yy.c
