@@ -68,7 +68,6 @@ int yyparse();
 %token ECRIRE
 %token RETOURNER
 %token FONCTION
-%token <sVal> BREAK
 %token VAR
 
 %nonassoc SANS_SINON

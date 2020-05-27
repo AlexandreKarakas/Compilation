@@ -62,6 +62,12 @@ void search(Node* ast){
 
 void search_oper(Oper_node* node){
     switch (node->type) {
+        case FONCTION :
+            search(node->childs[0]);
+            fprintf(output, "Lambda %d\n", getSize(node->childs[2]);
+            search(node->childs[1]);
+            search(node->childs[2]);
+        break;
         case SI:
             search(node->childs[0]);
             fprintf(output, "ConJmp %d\n", getSize(node->childs[1]));
