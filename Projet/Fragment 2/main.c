@@ -39,16 +39,22 @@ int main(int argc, char* argv[])
 
 void search(Node* ast){
     if(!ast) return;
-
     switch (ast->type) {
+        case ROOT_NODE:
+            search(ast->root.command);
+            search(ast->root.program);
+            break;
         case OPER_NODE:
             search_oper(&ast->oper);
             break;
         case CONST_NODE:
-            fprintf(output, "CstRe %d\n",  ast->cst.value);
+            if(ast->cst.valueType == INT_VALUE)
+                fprintf(output, "CstRe %d\n",  ast->cst.iValue);
+            else
+                fprintf(output, "CstStr %s\n", ast->cst.sValue);
             break;
         case ID_NODE:
-            fprintf(output, "SetVar %s\n", ast->id.name);
+            fprintf(output, "GetVar %s\n", ast->id.name);
             break;
     }
 }
@@ -87,7 +93,7 @@ void search_oper(Oper_node* node){
         break;
         case IDENT:
             search(node->childs[1]);
-            search(node->childs[0]);
+            fprintf(output, "SetVar %s\n", node->childs[0]->id.name);
         break;
         default:
             search(node->childs[0]);

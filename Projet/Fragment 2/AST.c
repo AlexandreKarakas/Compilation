@@ -2,6 +2,17 @@
 #include <stdarg.h>
 #include "ast.h"
 
+Node* newAST(Node* command, Node* program){
+    Node* node;
+    if(!(node = (Node*) malloc(sizeof(Node)))) return NULL;
+
+    node->type = ROOT_NODE;
+    node->root.command = command;
+    node->root.program = program;
+
+    return node;
+}
+
 Node* newOperation(int type, int nops, ...){
   Node* node;
   va_list ap;
@@ -26,9 +37,21 @@ Node* newConst(int n){
   if(!(node = (Node*) malloc(sizeof(Node)))) return NULL;
 
   node->type = CONST_NODE;
-  node->cst.value = n;
+  node->cst.valueType = INT_VALUE;
+  node->cst.iValue = n;
 
   return node;
+}
+
+Node* newString(char* string){
+    Node* node;
+    if(!(node = (Node*) malloc(sizeof(Node)))) return NULL;
+
+    node->type = CONST_NODE;
+    node->cst.valueType = STRING_VALUE;
+    node->cst.sValue = string;
+
+    return node;
 }
 
 Node* newIdent(char* id){

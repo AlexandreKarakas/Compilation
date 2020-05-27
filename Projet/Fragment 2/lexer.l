@@ -12,9 +12,11 @@
 "//".*                                ; /* ignore les commentaires uniligines */
 [/][*][^*]*[*]+([^*/][^*]*[*]+)*[/]   ; /* ignore les commentaires multilignes */
 "/*"                                  yy_fatal_error("Commentaire non fermé");
-[0-9]+                                yylval.num=atoi(yytext); return NOMBRE;
-([0-9]*[.])?[0-9]+                    yylval.num=atof(yytext); return NOMBRE;
-[a-z][a-zA-Z0-9\_\-]*                 yylval.id = malloc(yyleng); strcpy(yylval.id, yytext); return IDENT;
+[0-9]+                                yylval.iVal=atoi(yytext); return NOMBRE;
+([0-9]*[.])?[0-9]+                    yylval.fVal=atof(yytext); return NOMBRE;
+[a-z][a-zA-Z0-9\_\-]*                 yylval.sVal = malloc(yyleng); strcpy(yylval.sVal, yytext); return IDENT;
+\"(\\.|[^\\"])*\"                     yylval.sVal = malloc(yyleng); strcpy(yylval.sVal, yytext); return STRING;
+\'(\\.|[^\\'])*\'                     yylval.sVal = malloc(yyleng); strcpy(yylval.sVal, yytext); return STRING;
 "Vrai"                                yylval.bool=1; return BOOLEEN;
 "Faux"                                yylval.bool=0; return BOOLEEN;
 "<="                                  return EST_INFERIEUR_OU_EGAL_A;
@@ -24,6 +26,12 @@
 "&&"                                  return ET;
 "||"                                  return OU;
 "**"                                  return PUISSANCE;
+"+="                                  return PLUS_EGAL;
+"*="                                  return FOIS_EGAL;
+"-="                                  return MOINS_EGAL;
+"/="                                  return DIV_EGAL;
+"%="                                  return MOD_EGAL;
+"**="                                 return PUISSANCE_EGAL;
 "Si"                                  return SI;
 "Sinon"                               return SINON;
 "TantQue"                             return TANT_QUE;
@@ -35,7 +43,7 @@
 "Fonction"                            return FONCTION;
 "Break"                               return BREAK;
 "Retourner"                           return RETOURNER;
-[ \n]                                 return 0; /* ignore les fins de ligne */
+[ \n]                                 /* ignore les fins de ligne */
 .                                     return (int) yytext[0];
 %%
 
