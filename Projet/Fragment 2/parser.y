@@ -37,6 +37,7 @@ int yyparse();
 %token <bool> BOOLEEN
 %token <sVal> IDENT
 %token <sVal> STRING
+%token <sVal> BREAK
 
 %token <operator> '+' '-'
 %token <operator> '*' '/'
