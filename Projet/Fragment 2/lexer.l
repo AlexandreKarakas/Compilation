@@ -8,13 +8,14 @@
 %}
 
 %%
+[ \n]                                 ; /* ignore les fins de ligne */
 [ \t]+                                ; /* ignore les blancs et tabulations */
 "//".*                                ; /* ignore les commentaires uniligines */
 [/][*][^*]*[*]+([^*/][^*]*[*]+)*[/]   ; /* ignore les commentaires multilignes */
 "/*"                                  yy_fatal_error("Commentaire non fermé");
 [0-9]+                                yylval.iVal=atoi(yytext); return NOMBRE;
 ([0-9]*[.])?[0-9]+                    yylval.fVal=atof(yytext); return NOMBRE;
-[a-z][a-zA-Z0-9\_\-]*                 yylval.sVal = malloc(yyleng); strcpy(yylval.sVal, yytext); return IDENT;
+[a-z][a-zA-Z0-9\_]*                 yylval.sVal = malloc(yyleng); strcpy(yylval.sVal, yytext); return IDENT;
 \"(\\.|[^\\"])*\"                     yylval.sVal = malloc(yyleng); strcpy(yylval.sVal, yytext); return STRING;
 \'(\\.|[^\\'])*\'                     yylval.sVal = malloc(yyleng); strcpy(yylval.sVal, yytext); return STRING;
 "Vrai"                                yylval.bool=1; return BOOLEEN;
@@ -43,7 +44,6 @@
 "Fonction"                            return FONCTION;
 "Break"                               return BREAK;
 "Retourner"                           return RETOURNER;
-[ \n]                                 /* ignore les fins de ligne */
 .                                     return (int) yytext[0];
 %%
 

@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdarg.h>
 #include "ast.h"
+#include <stdio.h>
 
 Node* newAST(Node* command, Node* program){
     Node* node;

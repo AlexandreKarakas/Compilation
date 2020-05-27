@@ -47,7 +47,7 @@ struct Node {
   };
 };
 
-Node* newRoot(Node*, Root_node*);
+Node* newAST(Node*, Node*);
 Node* newOperation(int, int, ...);
 Node* newConst(int);
 Node* newString(char*);

@@ -14,11 +14,12 @@ int main(int argc, char* argv[])
     extern FILE* yyin;
     if(argc > 1){
         if(!(yyin = fopen(argv[1], "r"))){
-            fprintf(stderr, "Impossible d'ouvrir le fichier depuis lequel lire l'expression à parser!\n");
+            fprintf(stderr, "Impossible d'ouvrir le fichier depuis lequel lire les expressions à parser!\n");
             exit(1);
         }
     } else{
-        yyin = stdin;
+        fprintf(stderr, "Merci de spécifier un fichier depuis lequel lire les expressions à parser.\n");
+        exit(1);
     }
 
     Node* ast = (Node*) malloc(sizeof(Node));
@@ -75,14 +76,25 @@ void search_oper(Oper_node* node){
             search(node->childs[2]);
         break;
         case TANT_QUE:
-
+            search(node->childs[0]);
+            fprintf(output, "ConJmp %d\n", getSize(node->childs[1]));
+            search(node->childs[1]);
+            fprintf(output, "Jump -%d\n", getSize(node->childs[0])+getSize(node->childs[1]));
         break;
         case FAIRE:
-
+            search(node->childs[0]);
+            search(node->childs[1]);
+            fprintf(output, "ConJmp %d\n", 1);
+            fprintf(output, "Jump -%d\n", getSize(node->childs[0])+getSize(node->childs[1])+1);
         break;
         case POUR:
-
-        break;
+            search(node->childs[0]);
+            search(node->childs[1]);
+            fprintf(output, "ConJmp %d\n", getSize(node->childs[2])+getSize(node->childs[3]));
+            search(node->childs[2]);
+            search(node->childs[3]);
+            fprintf(output, "Jump -%d\n", getSize(node->childs[0])+getSize(node->childs[1])+getSize(node->childs[2])+getSize(node->childs[3])+1);
+            break;
         case ECRIRE:
             search(node->childs[0]);
             fprintf(output, "Print\n");

@@ -37,7 +37,6 @@ int yyparse();
 %token <bool> BOOLEEN
 %token <sVal> IDENT
 %token <sVal> STRING
-%token <sVal> BREAK
 
 %token <operator> '+' '-'
 %token <operator> '*' '/'
@@ -69,7 +68,7 @@ int yyparse();
 %token ECRIRE
 %token RETOURNER
 %token FONCTION
-%token BREAK
+%token <sVal> BREAK
 %token VAR
 
 %nonassoc SANS_SINON
@@ -78,7 +77,6 @@ int yyparse();
 %left ','
 %right ASSIGNE
 %right '?' ':'
-%left BINAIRE
 %left OU
 %left ET
 %left EST_EGAL_A                  EST_DIFFERENT_DE
@@ -90,30 +88,34 @@ int yyparse();
 
 %%
 
+resultat:
+    programme                                                         {*root = *$1;}
+  ;
+
 programme:
-    commande		                                                  {*root = *newAST($1,NULL);}						
-  | commande programme                                                {*root = *newAST($1,$2);}
+    commande                                                          {$$ = newAST($1,NULL);}
+  | commande programme                                                {$$ = newAST($1,$2);}
   ;
 
 commande:
    ';'                                                                {$$ = newOperation(';',0);}
   |'{' programme '}'                                                  {$$ = $2;}
   | affect_expr ';'                                                   {$$ = $1;}
-  | FONCTION IDENT '(' arguments ')' '{' programme '}'                {$$ = newOperation(FONCTION, 3, $2, $4, $7)}
+  | FONCTION IDENT '(' arguments ')' '{' programme '}'                {$$ = newOperation(FONCTION,3,$2,$4,$7);}
   | SI '(' expression ')' commande    %prec SANS_SINON                {$$ = newOperation(SI,2,$3,$5);}
   | SI '(' expression ')' commande SINON commande                     {$$ = newOperation(SINON,3,$3,$5,$7);}
   | BREAK                                                             {$$ = newIdent($1);}
   | TANT_QUE '(' expression ')' commande                              {$$ = newOperation(TANT_QUE,2,$3,$5);}
   | FAIRE commande TANT_QUE '(' expression ')'                        {$$ = newOperation(FAIRE,2,$2,$5);}
-  | RETOURNER '(' expression ')' ';'                                  {$$ = newOperation(RETOURNER, 1, $3);}
+  | RETOURNER '(' expression ')' ';'                                  {$$ = newOperation(RETOURNER,1,$3);}
   | POUR '(' affect_expr ';' expression ';' expression ')' commande   {$$ = newOperation(POUR,4,$3,$5,$7,$9);}
 /*| ECRIRE '(' expression ')' ';'                                     {$$ = newOperation(ECRIRE,1,$3);}*/
   ;
 
 affect_expr:
     expression                                                        {$$ = $1;}
-  | VAR IDENT '=' expression                                          {$$ = newOperation(VAR, 2, newIdent($2), $4);}
-  | VAR IDENT                                                         {$$ = newOperation(VAR, 1, newIdent($2));}
+  | VAR IDENT '=' expression                                          {$$ = newOperation(VAR,2,newIdent($2),$4);}
+  | VAR IDENT                                                         {$$ = newOperation(VAR,1,newIdent($2));}
   ;
 
 expression:
@@ -122,7 +124,7 @@ expression:
   | STRING                                                            {$$ = newString($1);}
   | IDENT                                                             {$$ = newIdent($1);}
   | '(' expression ')'                                                {$$ = $2;}
-  | IDENT '(' expressions ')'                                         {$$ = newOperation($1, 1, $3);}
+  | IDENT '(' expressions ')'                                         {$$ = newOperation($1,1,$3);}
   | op_unaire expression %prec UNAIRE                                 {$$ = newOperation($1,1,$2);}
   | operation_binaire                	                                {$$ = $1;}
   | expression '?' expression ':' expression                          {$$ = newOperation('?',3,$1,$3,$5);}
@@ -172,9 +174,9 @@ assigne:
 arguments:
   /* Rien */
   | IDENT                                                             {$$ = newIdent($1);}
-  | IDENT ',' arguments                                               {$$ = newOperation(",", 2, $1, $3);}
-  | IDENT '=' expression                                              {$$ = newOperation("=", 2, $1, $3);}
-  | IDENT '=' expression ',' arguments                                {$$ = newOperation(",=", 3, $1, $3, $5);}
+  | IDENT ',' arguments                                               {$$ = newOperation(',',2,$1,$3);}
+  | IDENT '=' expression                                              {$$ = newOperation('=',2,$1,$3);}
+  | IDENT '=' expression ',' arguments                                {$$ = newOperation(',',3,$1,$3,$5);}
   ;
 
 
