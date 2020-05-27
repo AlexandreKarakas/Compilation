@@ -1,7 +1,7 @@
 # Projet de Compilation 
 
 - Nady SADDIK
-- Alexnadre KARAKAS
+- Alexandre KARAKAS
 
 ## Langage
 
@@ -15,3 +15,5 @@ Pour notre compilateur, il faudra suivre plusieurs étapes :
 - Compiler le parseur avec la commande : bison -d parser.y
 
 - Puis on compile tous les fichiers avec la commande gcc -o compilateur AST.c parser.tab.c main.c lex.yy.c
+
+Pour utiliser notre compilateur, vous devrez entrer sur le terminal ./compilateur nom_fichier_code
