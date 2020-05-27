@@ -18,27 +18,31 @@ typedef struct {
         int iValue;
         char* sValue;
     };
+    int taille;
 } Const_node;
 
 typedef struct {
     char* name;
+    int taille;
 } ID_node;
 
 typedef struct {
     int type;
     int nops;
+    int taille;
     struct Node* childs[4];
 } Oper_node;
 
 typedef struct {
     struct Node* command;
     struct Node* program;
+    int taille;
 } Root_node;
 
 typedef struct Node Node;
 struct Node {
   Node_type type; // Type du noeud (ex : IF)
-
+  int taille;
   union {
     Root_node root;
     Const_node cst;
