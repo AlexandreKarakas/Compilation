@@ -1,0 +1,4 @@
+x=4;
+y=2+8-x;
+azerty=3;
+Si(x>=2) x=x+1; Sinon x=x+1;
