@@ -16,3 +16,9 @@ Dans le fragment 1 nous avons implémenter les grammaires suivantes :
 
 Pour que notre compilateur puisse lire un programme, il faut donner en paramètre le fichier correspondant,
 et génère une fichier.jsm
+
+Dans le fragment 2 : 
+
+Nous avons dans ce fragment implémenter toute les grammaires du fragment 2
+Nous avons implémenter les String
+
