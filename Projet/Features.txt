@@ -1,0 +1,18 @@
+Voici ce qu'on a implémenter :
+
+Dans le fragment 0:
+Implémentation des valeurs flottantes et booléennes
+Affectation
+Variables, mot clé
+égalité stricte et opération arithmétique
+
+Dans le fragment 1 nous avons implémenter les grammaires suivantes :
+
+- Si(...){...} Sinon {...}
+- Si (...) {...}
+- La gestion de priorité est fait
+-TantQue(..){..} de même pour while, faire, TantQue, le do while Pour(.., ..,..) 
+- Implémentation des commentaires.
+
+Pour que notre compilateur puisse lire un programme, il faut donner en paramètre le fichier correspondant,
+et génère une fichier.jsm
