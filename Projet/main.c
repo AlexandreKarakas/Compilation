@@ -92,9 +92,10 @@ void search_oper(Node* node1){
     Oper_node node = node1->oper;
 
     switch (node.type) {
-        case BREAK:
+        /*case BREAK:
             fprintf(output, "Jump %d\n", node1->height);
             break;
+        */
         case FONCTION:
             fprintf(output, "Lambda %d\n", node.childs[2]->height);
             search(node.childs[2]);
