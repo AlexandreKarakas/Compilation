@@ -13,6 +13,7 @@ Node* newAST(Node* command, Node* program){
     return node;
 }
 
+
 Node* newOperation(int type, int nops, ...){
   Node* node;
   va_list ap;
@@ -63,10 +64,33 @@ Node* newIdent(char* id){
 
   return node;
 }
-/*
-Node* newFunc(int nops, ){
+
+Node* newFunc(ID_node* id, Args_node* args, Node* program){
     Node* node;
     if(!(node = (Node*) malloc(sizeof(Node)))) return NULL;
 
-    node->type =
-}*/
+    node->type = FUNC_NODE;
+    node->func.name = id;
+    node->func.arglist = args;
+    node->func.program = program;
+
+    return node;
+}
+
+Node* newArgs(int nargs, ...){
+    Node* node;
+    va_list ap;
+
+    if(!(node = (Node*) malloc(sizeof(Node)))) return NULL;
+
+    node->type = ARG_NODE;
+    node->args.nargs = nargs;
+
+    va_start(ap, nargs);
+    for(int i=0;i<nargs;i++){
+        node->args.list[i] = va_arg(ap, Node*);
+    }
+    va_end(ap);
+
+    return node;
+}

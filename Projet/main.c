@@ -73,6 +73,14 @@ void search(Node* ast){
             search(ast->root.command);
             search(ast->root.program);
             break;
+        case FUNC_NODE:
+            //fprintf(output, "Lambda %d\n", node.childs[2]->height);
+            search(ast->func.program);
+            break;
+        case ARG_NODE:
+            for(int i=0; i<ast->args.nargs; i++)
+                search(ast->args.list[i]);
+            break;
         case OPER_NODE:
             search_oper(ast);
             break;

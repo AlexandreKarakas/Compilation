@@ -4,7 +4,7 @@
 /* ----- NODE TYPES ----- */
 
 typedef enum Node_type {
-    CONST_NODE, ID_NODE, OPER_NODE, /*FUNC_NODE, ARG_NODE,*/ ROOT_NODE
+    CONST_NODE, ID_NODE, OPER_NODE, FUNC_NODE, ARG_NODE, ROOT_NODE
 } Node_type;
 
 typedef enum Value_type {
@@ -31,6 +31,19 @@ typedef struct {
 } Oper_node;
 
 typedef struct {
+    int nargs;
+    struct Node** list;
+} Args_node;
+
+typedef struct{
+    int nargs;
+    ID_node* name;
+    Args_node* arglist;
+    struct Node* program;
+} Func_node;
+
+
+typedef struct {
     struct Node* command;
     struct Node* program;
 } Root_node;
@@ -45,6 +58,8 @@ struct Node {
     Const_node cst;
     ID_node id;
     Oper_node oper;
+    Func_node func;
+    Args_node args;
   };
 };
 
@@ -53,5 +68,7 @@ Node* newOperation(int, int, ...);
 Node* newConst(int);
 Node* newString(char*);
 Node* newIdent(char*);
+Node* newFunc(ID_node*, Args_node*, Node*);
+Node* newArgs(int, ...);
 
 #endif /* AST_H_ */
