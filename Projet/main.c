@@ -64,6 +64,8 @@ void search(Node* ast){
 
 void search_oper(Oper_node* node){
     switch (node->type) {
+        case BREAK:
+            fprintf(output, "Jump %d\n" , node->height);
         case FONCTION:
             search(node->childs[0]);
             fprintf(output, "Lambda %d\n", node->childs[2]->height);
