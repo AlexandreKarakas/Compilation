@@ -104,7 +104,7 @@ commande:
   | FONCTION IDENT '(' arguments ')' '{' programme '}'                {$$ = newOperation(FONCTION,3,newIdent($2),$4,$7);}
   | SI '(' expression ')' commande    %prec SANS_SINON                {$$ = newOperation(SI,2,$3,$5);}
   | SI '(' expression ')' commande SINON commande                     {$$ = newOperation(SINON,3,$3,$5,$7);}
-  | BREAK                                                             {$$ = newIdent($1);}
+  | BREAK                                                             {$$ = newOperation(BREAK, 0);}
   | TANT_QUE '(' expression ')' commande                              {$$ = newOperation(TANT_QUE,2,$3,$5);}
   | FAIRE commande TANT_QUE '(' expression ')'                        {$$ = newOperation(FAIRE,2,$2,$5);}
   | RETOURNER '(' expression ')' ';'                                  {$$ = newOperation(RETOURNER,1,$3);}
