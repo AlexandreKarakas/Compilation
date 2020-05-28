@@ -6,7 +6,7 @@
 FILE* output;
 
 void search(Node*);
-void search_oper(Oper_node*);
+void search_oper(Node*);
 //int getSize(Node*);
 Node* setSizeForEachNode(Node*);
 
@@ -39,6 +39,32 @@ int main(int argc, char* argv[])
 
     return EXIT_SUCCESS;
 }
+/*
+void declareArgs(Node* ast){
+    if(!ast) return;
+    switch (ast->type) {
+        case ROOT_NODE:
+            search(ast->root.command);
+            search(ast->root.program);
+            break;
+        case OPER_NODE:
+            if(ast->oper.type == FONCTION){
+                fprintf(output, "Lambda %d\n", ast->oper.childs);
+                fprintf(output, "DclArg %s\n", ast->oper.childs[0]->id.name);
+                //fprintf(output, "SetVar %s\n", ast->oper.childs[1]->);
+            }
+            break;
+        case CONST_NODE:
+            if(ast->cst.valueType == INT_VALUE)
+                fprintf(output, "CstRe %d\n",  ast->cst.iValue);
+            else
+                fprintf(output, "CstStr %s\n", ast->cst.sValue);
+            break;
+        case ID_NODE:
+            fprintf(output, "GetVar %s\n", ast->id.name);
+            break;
+    }
+}*/
 
 void search(Node* ast){
     if(!ast) return;
@@ -48,7 +74,7 @@ void search(Node* ast){
             search(ast->root.program);
             break;
         case OPER_NODE:
-            search_oper(&ast->oper);
+            search_oper(ast);
             break;
         case CONST_NODE:
             if(ast->cst.valueType == INT_VALUE)
@@ -62,65 +88,66 @@ void search(Node* ast){
     }
 }
 
-void search_oper(Oper_node* node){
-    switch (node->type) {
+void search_oper(Node* node1){
+    Oper_node node = node1->oper;
+
+    switch (node.type) {
         case BREAK:
-            fprintf(output, "Jump %d\n" , node->height);
+            fprintf(output, "Jump %d\n", node1->height);
+            break;
         case FONCTION:
-            search(node->childs[0]);
-            fprintf(output, "Lambda %d\n", node->childs[2]->height);
-            search(node->childs[1]);
-            search(node->childs[2]);
+            fprintf(output, "Lambda %d\n", node.childs[2]->height);
+            search(node.childs[2]);
             break;
         case SI:
-            search(node->childs[0]);
-            fprintf(output, "ConJmp %d\n", node->childs[1]->height-1);
-            search(node->childs[1]);
+            search(node.childs[0]);
+            fprintf(output, "ConJmp %d\n", node.childs[1]->height-1);
+            search(node.childs[1]);
         break;
         case SINON:
         case '?':
-            search(node->childs[0]);
-            fprintf(output, "ConJmp %d\n", node->childs[1]->height);
-            search(node->childs[1]);
-            fprintf(output, "Jump %d\n", node->childs[2]->height-1);
-            search(node->childs[2]);
+            search(node.childs[0]);
+            fprintf(output, "ConJmp %d\n", node.childs[1]->height);
+            search(node.childs[1]);
+            fprintf(output, "Jump %d\n", node.childs[2]->height-1);
+            search(node.childs[2]);
         break;
         case TANT_QUE:
-            search(node->childs[0]);
-            fprintf(output, "ConJmp %d\n", node->childs[1]->height);
-            search(node->childs[1]);
-            fprintf(output, "Jump -%d\n", node->childs[0]->height+node->childs[1]->height+1);
+            search(node.childs[0]);
+            fprintf(output, "ConJmp %d\n", node.childs[1]->height);
+            search(node.childs[1]);
+            fprintf(output, "Jump -%d\n", node.childs[0]->height+node.childs[1]->height+1);
         break;
         case FAIRE:
-            search(node->childs[0]);
-            search(node->childs[1]);
+            search(node.childs[0]);
+            search(node.childs[1]);
             fprintf(output, "ConJmp %d\n", 1);
-            fprintf(output, "Jump -%d\n", node->childs[0]->height+node->childs[1]->height+1);
+            fprintf(output, "Jump -%d\n", node.childs[0]->height+node.childs[1]->height+1);
         break;
         case POUR:
-            search(node->childs[0]);
-            search(node->childs[1]);
-            fprintf(output, "ConJmp %d\n", node->childs[2]->height+node->childs[3]->height-1);
-            search(node->childs[2]);
-            search(node->childs[3]);
-            fprintf(output, "Jump -%d\n", node->childs[1]->height+node->childs[2]->height+node->childs[3]->height);
+            search(node.childs[0]);
+            search(node.childs[1]);
+            fprintf(output, "ConJmp %d\n", node.childs[2]->height+node.childs[3]->height-1);
+            search(node.childs[2]);
+            search(node.childs[3]);
+            fprintf(output, "Jump -%d\n", node1->height-node.childs[0]->height);
             break;
         case ECRIRE:
-            search(node->childs[0]);
+            search(node.childs[0]);
             fprintf(output, "Print\n");
         break;
         case UNAIRE: // Il s'agit du "-" unaire ici
-            search(node->childs[0]);
+            search(node.childs[0]);
             fprintf(output, "NegaRe\n");
         break;
         case IDENT:
-            search(node->childs[1]);
-            fprintf(output, "SetVar %s\n", node->childs[0]->id.name);
+            search(node.childs[1]);
+            fprintf(output, "SetVar %s\n", node.childs[0]->id.name);
         break;
         default:
-            search(node->childs[0]);
-            search(node->childs[1]);
-            switch (node->type) {
+            search(node.childs[0]);
+            search(node.childs[1]);
+            switch (node.type) {
                 case '+':
                     fprintf(output, "AddiRe\n");
                     break;

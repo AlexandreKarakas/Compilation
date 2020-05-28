@@ -4,7 +4,7 @@
 /* ----- NODE TYPES ----- */
 
 typedef enum Node_type {
-    CONST_NODE, ID_NODE, OPER_NODE, ROOT_NODE
+    CONST_NODE, ID_NODE, OPER_NODE, /*FUNC_NODE, ARG_NODE,*/ ROOT_NODE
 } Node_type;
 
 typedef enum Value_type {

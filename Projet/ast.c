@@ -1,7 +1,6 @@
 #include <stdlib.h>
 #include <stdarg.h>
 #include "ast.h"
-#include <stdio.h>
 
 Node* newAST(Node* command, Node* program){
     Node* node;
@@ -64,3 +63,10 @@ Node* newIdent(char* id){
 
   return node;
 }
+/*
+Node* newFunc(int nops, ){
+    Node* node;
+    if(!(node = (Node*) malloc(sizeof(Node)))) return NULL;
+
+    node->type =
+}*/
