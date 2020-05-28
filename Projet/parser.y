@@ -109,7 +109,7 @@ commande:
   | FAIRE commande TANT_QUE '(' expression ')'                        {$$ = newOperation(FAIRE,2,$2,$5);}
   | RETOURNER '(' expression ')' ';'                                  {$$ = newOperation(RETOURNER,1,$3);}
   | POUR '(' affect_expr ';' expression ';' expression ')' commande   {$$ = newOperation(POUR,4,$3,$5,$7,$9);}
-/*| ECRIRE '(' expression ')' ';'                                     {$$ = newOperation(ECRIRE,1,$3);}*/
+  | ECRIRE '(' expression ')' ';'                                     {$$ = newOperation(ECRIRE,1,$3);}
   ;
 
 affect_expr:
