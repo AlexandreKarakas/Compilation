@@ -181,6 +181,7 @@ arguments:
 %%
 
 #include <string.h>
+#include <stdio.h>
 
 int yyerror(Node* root, const char *s){
   extern int yylineno;
